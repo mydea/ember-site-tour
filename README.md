@@ -1,26 +1,52 @@
-# Ember-hopscotch
+# ember-hopscotch
 
-This README outlines the details of collaborating on this Ember addon.
+An ember add-on to implement site tours based on
+[hoscotch.js](http://linkedin.github.io/hopscotch).
+
+Documentation: [http://mydea.github.io/ember-hopscotch/](http://mydea.github.io/ember-hopscotch/)
 
 ## Installation
 
-* `git clone` this repository
-* `npm install`
-* `bower install`
+`ember install ember-hopscotch`
 
-## Running
+## Basic Usage
 
-* `ember server`
-* Visit your app at http://localhost:4200.
+```js
+// app/index/route.js
+import Ember from 'ember';
+import RouteTourMixin from 'ember-hopscotch/mixins/route-tour';
 
-## Running Tests
+export default Ember.Route.extend(RouteTourMixin, {});
+```
 
-* `npm test` (Runs `ember try:testall` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
+```handlebars
+// app/index/template.hbs
 
-## Building
+{{#tour-start-button}}
+  <button>Start Tour</button>
+{{/tour-start-button}}
+```
 
-* `ember build`
+```js
+// app/index/tour.js
+export default [
+  {
+    target: '.first',
+    title: 'First Step',
+    content: `Lorem Ipsum...`
+  },
+  {
+    target: '.second',
+    title: 'Second Step',
+    content: `Lorem Ipsum...`
+  },
+  {
+    target: '.third',
+    placement: 'bottom',
+    title: 'Third Step',
+    content: `Lorem Ipsum...`
+  }
+];
+```
 
-For more information on using ember-cli, visit [http://ember-cli.com/](http://ember-cli.com/).
+For more detailed instructions, please visit the [documentation](http://mydea.github.io/ember-hopscotch/).

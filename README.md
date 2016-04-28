@@ -13,6 +13,7 @@ Documentation: [http://mydea.github.io/ember-hopscotch/](http://mydea.github.io/
 
 ```js
 // app/index/route.js
+
 import Ember from 'ember';
 import RouteTourMixin from 'ember-hopscotch/mixins/route-tour';
 
@@ -20,7 +21,7 @@ export default Ember.Route.extend(RouteTourMixin, {});
 ```
 
 ```handlebars
-// app/index/template.hbs
+{{! app/index/template.hbs }}
 
 {{#tour-start-button}}
   <button>Start Tour</button>
@@ -29,6 +30,7 @@ export default Ember.Route.extend(RouteTourMixin, {});
 
 ```js
 // app/index/tour.js
+
 export default [
   {
     target: '.first',
@@ -49,4 +51,5 @@ export default [
 ];
 ```
 
-For more detailed instructions, please visit the [documentation](http://mydea.github.io/ember-hopscotch/).
+For more detailed instructions and examples,
+please visit the [documentation](http://mydea.github.io/ember-hopscotch/).

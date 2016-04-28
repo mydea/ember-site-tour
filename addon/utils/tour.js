@@ -5,6 +5,8 @@ const { get, set } = Ember;
 
 export default Ember.Object.extend(Ember.Evented, {
 
+  tour: Ember.inject.service(),
+
   /**
    * The ID of the tour.
    *
@@ -47,18 +49,6 @@ export default Ember.Object.extend(Ember.Evented, {
   calloutOptions: null,
 
   /**
-   * The i18n configuration for the tour. Overwrite this if you want to.
-   *
-   * @attribute i18nConfiguration
-   * @type {Object}
-   * @optional
-   * @public
-   */
-  i18nConfiguration: {
-    stepOfSteps: 'Step {{step}} of {{of}}'
-  },
-
-  /**
    * The status of the tour.
    *
    * @property status
@@ -98,6 +88,12 @@ export default Ember.Object.extend(Ember.Evented, {
    */
   _calloutManager: null,
 
+  /**
+   * Start the tour.
+   *
+   * @method start
+   * @public
+   */
   start() {
     this._checkSteps();
     let id = get(this, 'tourId');
@@ -122,12 +118,25 @@ export default Ember.Object.extend(Ember.Evented, {
     this._onStart();
   },
 
-  showCallout() {
+  /**
+   * Show the callout for the tour.
+   * By default, only show it if it hasn't been viewed before.
+   *
+   * @method showCallout
+   * @param {Boolean} showAgain If this is true, show it even if it has been closed before.
+   * @public
+   */
+  showCallout(showAgain = false) {
     let calloutOptions = get(this, 'calloutOptions');
+    let { id } = calloutOptions;
     let calloutManager = this.get('_calloutManager');
+    let tour = get(this, 'tour');
+
+    if (!showAgain && tour.getIsRead(id)) {
+      return false;
+    }
 
     if (calloutOptions) {
-      let { id } = calloutOptions;
       if (calloutManager.getCallout(id)) {
         calloutManager.removeCallout(id);
       }
@@ -141,6 +150,12 @@ export default Ember.Object.extend(Ember.Evented, {
     }
   },
 
+  /**
+   * Hide the callout for the tour.
+   *
+   * @method hideCallout
+   * @public
+   */
   hideCallout() {
     let calloutOptions = get(this, 'calloutOptions');
     let calloutManager = this.get('_calloutManager');
@@ -153,17 +168,41 @@ export default Ember.Object.extend(Ember.Evented, {
     }
   },
 
+  /**
+   * This is called whenever the tour starts.
+   *
+   * @method _onStart
+   * @private
+   */
   _onStart() {
     set(this, 'status', 'RUNNING');
     this.trigger('tour.start', this._getEventData());
   },
 
+  /**
+   * This is called whenever the tour ends (=viewed until the end).
+   *
+   * @method _onEnd
+   * @private
+   */
   _onEnd() {
+    let tour = get(this, 'tour');
+    tour.setIsRead(get(this, 'tourId'), true);
+
     set(this, 'status', 'ENDED');
     this.trigger('tour.end', this._getEventData());
   },
 
+  /**
+   * This is called whenever the tour is closed before its end.
+   *
+   * @method _onClose
+   * @private
+   */
   _onClose() {
+    let tour = get(this, 'tour');
+    tour.setIsRead(get(this, 'tourId'), true);
+
     Ember.run.next(() => {
       if (get(this, 'status') !== 'ENDED') {
         set(this, 'status', 'CANCELED');
@@ -172,19 +211,33 @@ export default Ember.Object.extend(Ember.Evented, {
     });
   },
 
+  /**
+   * This is called whenever the callout is shown.
+   *
+   * @method _onCalloutShow
+   * @private
+   */
   _onCalloutShow() {
     set(this, 'calloutStatus', 'SHOWN');
     this.trigger('callout.show', this._getEventData());
   },
 
+  /**
+   * This is called whenever the callout is closed.
+   *
+   * @method _onCalloutClose
+   * @private
+   */
   _onCalloutClose() {
+    let tour = get(this, 'tour');
+    tour.setIsRead(get(this, 'calloutOptions.id'), true);
+
     Ember.run.next(() => {
       if (get(this, 'calloutStatus') === 'SHOWN') {
         set(this, 'calloutStatus', 'CLOSED');
         this.trigger('callout.close', this._getEventData());
       }
     });
-
   },
 
   /**
@@ -196,12 +249,16 @@ export default Ember.Object.extend(Ember.Evented, {
    * @private
    */
   _getEventData() {
+    let tour = get(this, 'tour');
+    let id = get(this, 'tourId');
+
     return {
       tour: this,
-      id: get(this, 'tourId'),
+      id,
       status: get(this, 'status'),
       currentStep: get(this, 'currentStep'),
-      calloutStatus: get(this, 'calloutOptions') ? get(this, 'calloutStatus') : undefined
+      calloutStatus: get(this, 'calloutOptions') ? get(this, 'calloutStatus') : undefined,
+      tourHasBeenEnded: !!tour.getIsRead(id)
     };
   },
 
@@ -249,8 +306,9 @@ export default Ember.Object.extend(Ember.Evented, {
    * @private
    */
   _addTourStepCount(tourSteps) {
+    let tourService = get(this, 'tour');
     let stepCount = tourSteps.length;
-    let stepOfStepsStr = get(this, 'i18nConfiguration.stepOfSteps').replace('{{of}}', stepCount);
+    let stepOfStepsStr = tourService._t('Step {{step}} of {{of}}').replace('{{of}}', stepCount);
 
     return tourSteps.map((step, i) => {
       let stepOfSteps = stepOfStepsStr.replace('{{step}}', i + 1);

@@ -9,7 +9,7 @@ export default Ember.Mixin.create({
   setupController(controller, model) {
     this._super(...arguments);
 
-    let tourName = `route-${Ember.String.dasherize(Ember.String.classify(get(this, 'routeName')))}`;
+    let tourName = Ember.String.dasherize(Ember.String.classify(get(this, 'routeName')));
     let tour = this.get('tour').setupTour(tourName, model);
     controller.set('tour', tour);
   }

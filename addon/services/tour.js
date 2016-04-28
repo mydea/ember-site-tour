@@ -64,14 +64,12 @@ export default Ember.Service.extend({
   setupTour(tourId, model) {
     let steps = this._setupTourSteps(tourId, model);
 
-    let tour = Tour.create({
-      i18nConfiguration: {
-        stepOfSteps: this._t('Step {{step}} of {{of}}')
-      },
-      tourId,
-      steps,
-      model
-    });
+    let tour = Tour.create(
+      getOwner(this).ownerInjection(), {
+        tourId,
+        steps,
+        model
+      });
 
     return tour;
   },
@@ -92,6 +90,51 @@ export default Ember.Service.extend({
 
     tour.set('calloutOptions', options);
     return tour;
+  },
+
+  /**
+   * Check if a tour/callout has been read.
+   *
+   * @method getIsRead
+   * @param {String} id The id to check
+   * @return {Boolean}
+   */
+  getIsRead(id) {
+    if (!window.localStorage || !id) {
+      return false;
+    }
+
+    const lsKey = get(this, '_localStorageKey');
+    let lsData = window.localStorage.getItem(lsKey);
+    if (!lsData) {
+      return false;
+    }
+
+    lsData = JSON.parse(lsData);
+    return get(lsData, id);
+  },
+
+  /**
+   * Set a callout/tour as read.
+   *
+   * @method setIsRead
+   * @param {String} id The id to set as read
+   * @param {Boolean} isRead=true Set this to false if it should be unmarked
+   */
+  setIsRead(id, isRead = true) {
+    if (!window.localStorage) {
+      return;
+    }
+
+    const lsKey = get(this, '_localStorageKey');
+    let lsData = window.localStorage.getItem(lsKey);
+    if (lsData) {
+      lsData = JSON.parse(lsData);
+    } else {
+      lsData = {};
+    }
+    lsData[id] = isRead;
+    window.localStorage.setItem(lsKey, JSON.stringify(lsData));
   },
 
   _setupTourSteps(tourId, model) {

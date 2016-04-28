@@ -1,15 +1,90 @@
-{{#tour-start-button tour=tour callout='My Callout here'}}
-  <button>Start Tour</button>
-{{/tour-start-button}}
+<div class="jumbotron text-center">
+  <h1>ember-hopscotch</h1>
+  <p>
+    An ember add-on to implement site tours based on
+    <a href="http://linkedin.github.io/hopscotch" target="_blank">hopscotch.js</a>.
+  </p>
 
-<div>
-  <h2 id="first">First Stop</h2>
+  <p>
+    {{#code-inline language='bash'}}ember install ember-hopscotch{{/code-inline}}
+  </p>
+
+  <p>
+    {{#tour-start-button tour=tour callout='This tour about the tour is really meta.' calloutPlacement='right'}}
+      <button class="btn btn-primary btn-lg">Try Tour</button>
+    {{/tour-start-button}}
+  </p>
 </div>
 
-<div>
-  <h2 class="second">Second Stop</h2>
-</div>
+<h2 id="installation">Installation</h2>
+{{#code-block language='bash'}}ember install ember-hopscotch{{/code-block}}
 
-<div>
-  <h2 id="third">Third Stop</h2>
-</div>
+<h2 class="configuration">Configuration</h2>
+<p>
+  By default, both hopscotch.js as well as its default styles will be included.
+  You can opt out of this in your ember-cli-build.js:
+</p>
+
+{{#code-block language='javascript'}}// ember-cli-build.js
+// ...
+var app = new EmberApp({
+  'ember-hopscotch': {
+    'importHopscotchJS': false,
+    'importHopscotchCSS': false
+  }
+});
+// ...{{/code-block}}
+
+<p>
+  Note that by including the CSS, the default sprite images will also be included in <i>/assets/img</i>.
+</p>
+
+<h2 id="defining-tours">Defining Tours</h2>
+<p>
+  Define a tour for a route, either in pod form or in a <i>tours</i> directory:
+</p>
+
+{{#code-block language='javascript'}}// app/index/tour.js or app/tours/index.js
+export default [
+  {
+    target: '#first',
+    placement: 'bottom',
+    title: 'First step',
+    content: `This is the first step of the tour.`
+  },
+  {
+    target: '.second',
+    title: 'Second step',
+    content: `The second step follows.`
+  }
+]{{/code-block}}
+
+<p>
+  {{#link-to 'defining-tours' class='btn btn-primary'}}More Information{{/link-to}}
+</p>
+
+<h2 id="starting-tours">Starting/Using Tours</h2>
+<p>
+  In order to start a tour, you will need to:
+</p>
+
+<ol>
+  <li>Add the <i>RouteTour</i>-Mixin to your route</li>
+  <li>Add the <i>tour-start-button</i>-Component in your template</li>
+</ol>
+
+{{#code-block language='javascript'}}// app/index/route.js
+import Ember from 'ember';
+import TourMixin from 'ember-hopscotch/mixins/route-tour';
+
+export default Ember.Route.extend(TourMixin);{{/code-block}}
+
+{{#code-block language='handlebars'}}\{{! app/index/template.hbs }}
+&lt;h1>Welcome!&lt;/h1>
+\{{#tour-start-button tour=tour}}
+  &lt;button>Start Tour&lt;/button>
+\{{/tour-start-button}}{{/code-block}}
+
+<p>
+  {{#link-to 'usage' class='btn btn-primary'}}More Information{{/link-to}}
+</p>

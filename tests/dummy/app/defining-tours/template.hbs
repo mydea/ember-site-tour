@@ -1,0 +1,97 @@
+<ol class="breadcrumb">
+  <li class="active">
+    {{#link-to 'index'}}
+      Home
+    {{/link-to}}
+  </li>
+  <li class="active">
+    Defining Tours
+  </li>
+</ol>
+
+<h1>Defining Tours</h1>
+
+<h2>File Location</h2>
+
+<p>
+  You can define tours in pods or in a dedicated <i>tours</i> directory.
+  So for the most common use case, where you have a tour per route, you can specify the tour for this route like this:
+</p>
+
+{{#code-block language='javascript'}}// app/tours/index.js
+// app/index/tour.js{{/code-block}}
+
+<p>
+  For other scenarios, e.g. if you need multiple tours for a route,
+  or if a tour belongs to a component instead of a route,
+  you can basically specify the routes however you want:
+</p>
+
+{{#code-block language='javascript'}}// app/tours/index-initial.js
+// app/tours/index-repeated.js
+// app/my-component/tour.js{{/code-block}}
+
+<p>
+  Tours are resolved via the Ember Resolver, so everything that works there should work for the tours, too.
+</p>
+
+<h2>Tour Format</h2>
+
+<p>
+  A tour consists of one or more <i>step</i>s. Each step is defined by the following attributes:
+</p>
+
+<ul class="list-group">
+  <li class="list-group-item">
+    {{#code-inline}}target{{/code-inline}}: An HTML-selector where the step should be displayed.
+    This is evaluated when the tour is run (e.g. when the user clicks on the 'Start Tour' button),
+    and if the element is not in the DOM at this point, the step will be skipped.
+    This can be any selector that {{#code-inline language='javascript'}}document.querySelector(){{/code-inline}} can
+    work with.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}placement{{/code-inline}}: Where the tour step should be positioned in relation to the
+    target-element.
+    If this is not specified, it defaults to <i>top</i>.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}title{{/code-inline}}: The title for the step.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}content{{/code-inline}}: The content for the step. Can contain HTML.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}condition{{/code-inline}}: If a function is specified here, the step will only be included if the
+    function returns <i>true</i>. The function is evaluated when the tour is started. If a model is specified for the
+    tour, the function will receive this model as parameter.
+  </li>
+</ul>
+
+{{#code-block language='javascript'}}// app/index/tour.js
+export default [
+{
+target: '#first',
+placement: 'bottom',
+title: 'First step',
+content: `This is the first step of the tour.`
+},
+{
+target: '.second',
+title: 'Second step',
+content: `The second step follows.`
+},
+{
+target: '#does-not-exist',
+placement: 'bottom',
+title: 'Skip this step',
+content: `Non-existing selectors will be skipped. This is checked on runtime, when a tour is started.`
+},
+{
+condition(model) {
+return !!model;
+},
+target: '#third',
+title: 'Skip this step',
+content: `Skip this step if the condition returns false.`
+},
+]{{/code-block}}

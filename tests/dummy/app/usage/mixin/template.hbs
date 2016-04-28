@@ -1,0 +1,51 @@
+<ol class="breadcrumb">
+  <li class="active">
+    {{#link-to 'index'}}
+      Home
+    {{/link-to}}
+  </li>
+  <li>
+    {{#link-to 'usage'}}
+      Usage
+    {{/link-to}}
+  </li>
+  <li class="active">
+    Mixin
+  </li>
+</ol>
+
+<h1>RouteTour Mixin</h1>
+
+<p>
+  A <i>route-tour</i>-Mixin is provided that can be included in routes where you want to include a tour.
+</p>
+
+{{#code-block language='javascript'}}// app/index/route.js
+import Ember from 'ember';
+import TourMixin from 'ember-hopscotch/mixins/route-tour';
+
+export default Ember.Route.extend(TourMixin);{{/code-block}}
+
+<p>
+  This mixin is just a convenience, and can be very easily changed for more complex needs. All it does is the following:
+</p>
+
+{{#code-block language='javascript'}}// ember-hopscotch/mixins/route-tour.js
+import Ember from 'ember';
+const { get } = Ember;
+
+export default Ember.Mixin.create({
+  tour: Ember.inject.service(),
+
+  setupController(controller, model) {
+    this._super(...arguments);
+
+    let tourName = get(this, 'routeName');
+    let tour = this.get('tour').setupTour(tourName, model);
+    controller.set('tour', tour);
+  }
+});{{/code-block}}
+
+<p>
+  In addition, the mixin will also hide all callouts on <i>resetController</i>.
+</p>

@@ -1,0 +1,80 @@
+<ol class="breadcrumb">
+  <li class="active">
+    {{#link-to 'index'}}
+      Home
+    {{/link-to}}
+  </li>
+  <li>
+    {{#link-to 'usage'}}
+      Usage
+    {{/link-to}}
+  </li>
+  <li class="active">
+    tour-start-button
+  </li>
+</ol>
+
+<h1>tour-start-button Component</h1>
+
+<p>
+  This component makes it very easy to embed a tour into a page.
+  It can also be used to display a callout for the tour.
+</p>
+
+{{#code-block language='handlebars'}}\{{! app/index/template.hbs }}
+&lt;h1>Welcome!&lt;/h1>
+\{{#tour-start-button tour=tour}}
+  &lt;button>Start Tour&lt;/button>
+\{{/tour-start-button}}{{/code-block}}
+
+<p>
+  A click on whatever is inside the component will start the tour.
+</p>
+
+<h2 id="callout" style="margin-top: 120px;">Callout</h2>
+
+<p>
+  A callout for the tour can easily be added by specifying a <i>callout</i> attribute.
+  Alternatively, a <i>calloutPlacement</i> can also be specified (falls back to <i>top</i>),
+  as well as a <i>calloutTitle</i> parameter (which defaults to 'Start a tour!').
+</p>
+
+{{#code-block language='handlebars'}}\{{! app/index/template.hbs }}
+\{{#tour-start-button callout="The callout message" calloutPlacement="top" tour=tour}}
+  &lt;button>Start Tour&lt;/button>
+\{{/tour-start-button}}{{/code-block}}
+
+<p>
+  A callout is a message that is displayed next to the button component. It's purpose is to make people aware of the
+  tour.
+  Callouts can be closed and will not reappear anymore after that. Also, if a user starts the tour, the callout
+  will automatically be closed as well.
+</p>
+
+<h2>Actions</h2>
+
+<p>
+  The component also sends actions:
+</p>
+
+<ul class="list-group">
+  <li class="list-group-item">
+    {{#code-inline}}tourStarted{{/code-inline}}: When the tour has been started by the user.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}tourEnded{{/code-inline}}: When the tour ends (after the final step).
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}tourClosed{{/code-inline}}: When the tour is closed by the user before the final step.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}calloutShown{{/code-inline}}: When the callout is shown.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}calloutClosed{{/code-inline}}: When the callout is manually closed by the user.
+  </li>
+</ul>
+
+<p>
+  All of these actions receive an event as parameter, see {{#link-to 'usage.tour-object'}}Tour Object{{/link-to}} > Section 'Events'.
+</p>

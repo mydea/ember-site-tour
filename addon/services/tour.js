@@ -40,35 +40,55 @@ export default Ember.Service.extend({
   // Methods
 
   /**
-   * Init the tour & callout manager.
-   * This is automatically called on service initialisation.
+   * Show a single callout. This can be useful for hints etc.
    *
-   * @method init
+   * @method showCallout
+   * @param {String} id A unique id for this callout
+   * @param {Object} callout The callout object
+   * @param {Boolean} [onlyUnread=true] If the callout should only be shown if it is unread
    */
-  init() {
-    let calloutManager = hopscotch.getCalloutManager();
-    this.set('_calloutManager', calloutManager);
-    this._configureHopscotch();
+  showCallout(id, callout = {}, onlyUnread = true) {
+    const calloutManager = this.get('_calloutManager');
+
+    if (!onlyUnread || !this.getIsRead(id) && callout.target) {
+
+      const options = Ember.$.extend({
+        id,
+        onClose: () => this.setIsRead(id)
+      }, callout, true);
+
+      if (calloutManager.getCallout(id)) {
+        calloutManager.removeCallout(id);
+      }
+      calloutManager.createCallout(options);
+    }
   },
 
   /**
-   * Basic configuration for hopscotch.
-   * Overwrite this if you want a different configuration.
+   * Close a callout.
    *
-   * @method _configureHopscotch
-   * @private
+   * @method closeCallout
+   * @param {String} id The callout id to close
    */
-  _configureHopscotch() {
-    hopscotch.configure({
-      i18n: {
-        nextBtn: this._t('Next'),
-        prevBtn: this._t('Previous'),
-        skipBtn: this._t('Skip'),
-        doneBtn: this._t('Done')
-      }
-    });
+  closeCallout(id) {
+    const calloutManager = this.get('_calloutManager');
+
+    if (!id) {
+      calloutManager.removeAllCallouts();
+    } else {
+      calloutManager.removeCallout(id);
+      this.setIsRead(id);
+    }
   },
 
+  /**
+   * Setup a tour object.
+   *
+   * @method _setupTour
+   * @param tourId
+   * @param model
+   * @returns {Object}
+   */
   setupTour(tourId, model) {
     let steps = this._setupTourSteps(tourId, model);
 
@@ -100,6 +120,7 @@ export default Ember.Service.extend({
     return tour;
   },
 
+
   /**
    * Check if a tour/callout has been read.
    *
@@ -112,6 +133,7 @@ export default Ember.Service.extend({
       return false;
     }
 
+
     const lsKey = get(this, '_localStorageKey');
     let lsData = window.localStorage.getItem(lsKey);
     if (!lsData) {
@@ -119,7 +141,7 @@ export default Ember.Service.extend({
     }
 
     lsData = JSON.parse(lsData);
-    return get(lsData, id);
+    return lsData[id];
   },
 
   /**
@@ -160,7 +182,7 @@ export default Ember.Service.extend({
    * @private
    */
   _loadTour(tourId) {
-    let tourData = getOwner(this)._lookupFactory(`tour:${Ember.String.dasherize(tourId)}`) || [];
+    let tourData = getOwner(this)._lookupFactory(`tour:${tourId}`) || [];
     tourData = Ember.A(tourData);
 
     return tourData.map((step) => {
@@ -183,6 +205,36 @@ export default Ember.Service.extend({
    */
   _t(str) {
     return str;
+  },
+
+  /**
+   * Basic configuration for hopscotch.
+   * Overwrite this if you want a different configuration.
+   *
+   * @method _configureHopscotch
+   * @private
+   */
+  _configureHopscotch() {
+    hopscotch.configure({
+      i18n: {
+        nextBtn: this._t('Next'),
+        prevBtn: this._t('Previous'),
+        skipBtn: this._t('Skip'),
+        doneBtn: this._t('Done')
+      }
+    });
+  },
+
+  /**
+   * Init the tour & callout manager.
+   * This is automatically called on service initialisation.
+   *
+   * @method init
+   */
+  init() {
+    let calloutManager = hopscotch.getCalloutManager();
+    this.set('_calloutManager', calloutManager);
+    this._configureHopscotch();
   }
 
 });

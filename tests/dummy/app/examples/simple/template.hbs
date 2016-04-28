@@ -1,0 +1,29 @@
+<ol class="breadcrumb">
+  <li class="active">
+    {{#link-to 'index'}}
+      Home
+    {{/link-to}}
+  </li>
+  <li>
+    {{#link-to 'examples'}}
+      Examples
+    {{/link-to}}
+  </li>
+  <li class="active">
+    Basic Example
+  </li>
+</ol>
+
+<h1>Basic Example</h1>
+
+<p>
+  A basic example of a tour.
+</p>
+
+<h2>Demo</h2>
+
+{{#tour-start-button tour=tour callout='Click here to try the tour.'}}
+  <button>Start Tour</button>
+{{/tour-start-button}}
+
+{{demo-tour-content}}

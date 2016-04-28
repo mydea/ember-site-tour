@@ -3,6 +3,15 @@ import Ember from 'ember';
 
 const { get, set } = Ember;
 
+/**
+ * A tour object.
+ *
+ * @namespace EmberTour.Objects
+ * @class Tour
+ * @extends Ember.Object
+ * @uses Ember.Evented
+ * @public
+ */
 export default Ember.Object.extend(Ember.Evented, {
 
   tour: Ember.inject.service(),
@@ -98,9 +107,10 @@ export default Ember.Object.extend(Ember.Evented, {
     this._checkSteps();
     let id = get(this, 'tourId');
     let steps = get(this, '_steps');
+    let normalizedId = this._normalizeHopscotchId(id);
 
     let tour = {
-      id,
+      id: normalizedId,
       steps,
       onClose: () => this._onClose(),
       onEnd: () => this._onEnd(),
@@ -128,20 +138,25 @@ export default Ember.Object.extend(Ember.Evented, {
    */
   showCallout(showAgain = false) {
     let calloutOptions = get(this, 'calloutOptions');
+    if (!calloutOptions) {
+      return;
+    }
     let { id } = calloutOptions;
     let calloutManager = this.get('_calloutManager');
     let tour = get(this, 'tour');
+    let normalizedId = this._normalizeHopscotchId(id);
 
     if (!showAgain && tour.getIsRead(id)) {
       return false;
     }
 
     if (calloutOptions) {
-      if (calloutManager.getCallout(id)) {
-        calloutManager.removeCallout(id);
+      if (calloutManager.getCallout(normalizedId)) {
+        calloutManager.removeCallout(normalizedId);
       }
 
       calloutOptions = Ember.$.extend({}, calloutOptions, {
+        id: normalizedId,
         onClose: () => this._onCalloutClose()
       });
 
@@ -161,8 +176,10 @@ export default Ember.Object.extend(Ember.Evented, {
     let calloutManager = this.get('_calloutManager');
     if (calloutOptions) {
       let { id } = calloutOptions;
-      if (calloutManager.getCallout(id)) {
-        calloutManager.removeCallout(id);
+      let normalizedId = this._normalizeHopscotchId(id);
+
+      if (calloutManager.getCallout(normalizedId)) {
+        calloutManager.removeCallout(normalizedId);
         this._onCalloutClose();
       }
     }
@@ -258,7 +275,16 @@ export default Ember.Object.extend(Ember.Evented, {
       status: get(this, 'status'),
       currentStep: get(this, 'currentStep'),
       calloutStatus: get(this, 'calloutOptions') ? get(this, 'calloutStatus') : undefined,
-      tourHasBeenEnded: !!tour.getIsRead(id)
+      tourHasBeenEnded: !!tour.getIsRead(id),
+      toJSON() {
+        return {
+          id: this.id,
+          status: this.status,
+          currentStep: this.currentStep,
+          calloutStatus: this.calloutStatus,
+          tourHasBeenEnded: this.tourHasBeenEnded
+        };
+      }
     };
   },
 
@@ -318,6 +344,19 @@ export default Ember.Object.extend(Ember.Evented, {
         </div>`
       });
     });
+  },
+
+  /**
+   * Normalize the ID for hopscotch.
+   * This is necessary because hopscotch cannot work with dots in the ID.
+   *
+   * @method _normalizeHopscotchId
+   * @param {String} id The ID to normalize
+   * @returns {String} The normalized ID
+   * @private
+   */
+  _normalizeHopscotchId(id) {
+    return Ember.String.dasherize(Ember.String.classify(id));
   },
 
   /**

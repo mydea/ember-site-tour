@@ -1,0 +1,82 @@
+<ol class="breadcrumb">
+  <li class="active">
+    {{#link-to 'index'}}
+      Home
+    {{/link-to}}
+  </li>
+  <li>
+    {{#link-to 'usage'}}
+      Usage
+    {{/link-to}}
+  </li>
+  <li class="active">
+    Tour Object
+  </li>
+</ol>
+
+<h1>Tour Object</h1>
+
+<p>
+  You can create a new tour object via the {{#link-to 'usage.service'}}tour Service's{{/link-to}} <i>setupTour()</i>
+  function.
+</p>
+
+<h2>Methods</h2>
+
+<ul class="list-group">
+  <li class="list-group-item">
+    {{#code-inline}}start(){{/code-inline}}: Start the tour. This will check all steps' DOM elements for availability,
+    as well as any provided <i>condition</i> functions. It will also hide the associated callout, if one is visible.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}showCallout(showAgain = false){{/code-inline}}: Show the callout, if one has been specified.
+    If the callout has already been hidden before, only show it if <i>showAgain</i> is set to true.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}hideCallout(){{/code-inline}}: Hide the callout.
+  </li>
+</ul>
+
+<h2>Events</h2>
+
+<p>
+  The tour object emits events. You can listen to them via
+  {{#code-inline language='javascript'}}tour.on('tour.start', function(e) {});{{/code-inline}}.
+  The following events are emitted:
+</p>
+
+<ul class="list-group">
+  <li class="list-group-item">
+    {{#code-inline}}tour.start{{/code-inline}}: When the tour is started.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}tour.end{{/code-inline}}: When the tour is ended (after the last step).
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}tour.close{{/code-inline}}: When the tour is manually closed before the last step.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}callout.show{{/code-inline}}: When the callout is shown.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}tour.close{{/code-inline}}: When the callout is manually closed.
+  </li>
+</ul>
+
+<p>
+  All event listeners will receive an object as parameter, containing the following information:
+</p>
+
+{{#code-block language='javascript'}}{
+  tour: {}, // The actual Tour Object
+  id: 'index', // The ID of the tour
+  status: 'INACTIVE', // one of: INACTIVE, RUNNING, ENDED, CANCELED
+  currentStep: 0, // the number of the current step.
+  calloutStatus: 'AUTOCLOSED', // undefined if no callout is specified, or one of: INACTIVE, SHOWN, CLOSED, AUTOCLOSED
+                               // AUTOCLOSED means that the callout was closed because the user started the tour
+  tourHasBeenEnded: false // if the tour has ever been ended/closed before
+}{{/code-block}}
+
+<p>
+  status, currentStep & calloutStatus are also available as properties on the Object.
+</p>

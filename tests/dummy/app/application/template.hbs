@@ -1,7 +1,56 @@
-<h1>ember-hopscotch</h1>
+<div class="navbar navbar-inverse navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <div class="navbar-toggle-wrapper visible-xs">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".js-navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      {{#link-to 'index' class="navbar-brand"}}ember-hopscotch{{/link-to}}
+    </div>
+    <div class="collapse navbar-collapse js-navbar-collapse">
+      <ul class="navbar-nav nav">
+        <li>
+          {{#link-to 'index'}}
+            Getting Started
+          {{/link-to}}
+        </li>
+        <li>
+          {{#link-to 'defining-tours'}}
+            Defining Tours
+          {{/link-to}}
+        </li>
+        {{#bs-dropdown tagName="li"}}
+          {{#bs-dropdown-toggle}}Usage <span class="caret"></span>{{/bs-dropdown-toggle}}
+          {{#bs-dropdown-menu}}
+            <li>{{#link-to "usage.index"}}Overview{{/link-to}}</li>
+            <li>{{#link-to "usage.mixin"}}RouteTour Mixin{{/link-to}}</li>
+            <li>{{#link-to "usage.tour-start-button"}}tour-start-button Component{{/link-to}}</li>
+            <li>{{#link-to "usage.tour-object"}}tour Object{{/link-to}}</li>
+            <li>{{#link-to "usage.service"}}tour Service{{/link-to}}</li>
+          {{/bs-dropdown-menu}}
+        {{/bs-dropdown}}
+        {{#bs-dropdown tagName="li"}}
+          {{#bs-dropdown-toggle}}Examples <span class="caret"></span>{{/bs-dropdown-toggle}}
+          {{#bs-dropdown-menu}}
+            <li>{{#link-to "examples.simple"}}Basic Example{{/link-to}}</li>
+            <li>{{#link-to "examples.tracking"}}Tracking Tour Performance{{/link-to}}</li>
+          {{/bs-dropdown-menu}}
+        {{/bs-dropdown}}
+      </ul>
+      <ul class="navbar-nav nav navbar-right">
+        <li>
+          <a href="https://github.com/mydea/ember-hopscotch" target="_blank">
+            View on Github
+          </a>
+        </li>
 
-<p>
-  An ember-addon to add flexible site tours.
-</p>
-
-{{outlet}}
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="container">
+  {{outlet}}
+</div>

@@ -1,0 +1,59 @@
+<ol class="breadcrumb">
+  <li class="active">
+    {{#link-to 'index'}}
+      Home
+    {{/link-to}}
+  </li>
+  <li>
+    {{#link-to 'examples'}}
+      Examples
+    {{/link-to}}
+  </li>
+  <li class="active">
+    Tracking
+  </li>
+</ol>
+
+<h1>Tracking Tour Performance</h1>
+
+<p>
+  You might want to track how your visitors use your tours. It is quite easy to do this with the provided events.
+</p>
+
+{{#code-block language='handlebars'}}\{{! app/index/template.hbs }}
+&lt;h1>Welcome!&lt;/h1>
+\{{#tour-start-button tour=tour tourStarted='tourStarted' tourEnded='tourEnded' tourClosed='tourClosed'}}
+  &lt;button>Start Tour&lt;/button>
+\{{/tour-start-button}}{{/code-block}}
+
+{{#code-block language='javascript'}}// app/index/route.js
+import Ember from 'ember';
+import TourMixin from 'ember-hopscotch/mixins/route-tour';
+
+export default Ember.Route.extend(TourMixin, {
+  _trackEvent(name, data) {
+    // actually track your event
+    // to e.g. Keen.IO
+  },
+
+  actions: {
+    tourStarted(e) {
+      this._trackEvent('tour-started', e.toJSON());
+    },
+    tourEnded(e) {
+      this._trackEvent('tour-ended', e.toJSON());
+    },
+    tourClosed(e) {
+      this._trackEvent('tour-closed', e.toJSON());
+    }
+  }
+});{{/code-block}}
+
+<h2 id="tour-start">Demo</h2>
+
+{{#tour-start-button tour=tour tourStarted='tourStarted' tourEnded='tourEnded' tourClosed='tourClosed'}}
+  <button>Start Tour</button>
+{{/tour-start-button}}
+
+<h3 id="tour-end">Tracking Log:</h3>
+<ul id="tracking-log"></ul>

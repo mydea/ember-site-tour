@@ -1,0 +1,34 @@
+<ol class="breadcrumb">
+  <li class="active">
+    {{#link-to 'index'}}
+      Home
+    {{/link-to}}
+  </li>
+  <li class="active">
+    Usage
+  </li>
+</ol>
+
+<h1>Usage</h1>
+
+<p>
+  Tour can be started in different ways.
+  The most straightforward way is to use the provided mixin and component.
+</p>
+
+<p>
+  For the most common use case, you will need to:
+</p>
+
+<ol>
+  <li>Add the {{#link-to 'usage.mixin'}}RouteTour{{/link-to}}-Mixin to your route</li>
+  <li>Add the {{#link-to 'usage.tour-start-button'}}tour-start-button{{/link-to}}-Component in your template</li>
+</ol>
+
+<p>
+  Alternatively, you can also manually setup & start a tour via the {{#link-to 'usage.service'}}tour{{/link-to}}-Service.
+</p>
+
+<p>
+  You can interact with the tour over the {{#link-to 'usage.tour-object'}}Tour{{/link-to}}-Object.
+</p>

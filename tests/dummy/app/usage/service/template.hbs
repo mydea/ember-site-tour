@@ -1,0 +1,86 @@
+<ol class="breadcrumb">
+  <li class="active">
+    {{#link-to 'index'}}
+      Home
+    {{/link-to}}
+  </li>
+  <li>
+    {{#link-to 'usage'}}
+      Usage
+    {{/link-to}}
+  </li>
+  <li class="active">
+    Service
+  </li>
+</ol>
+
+<h1>tour Service</h1>
+
+<p>
+  The tour service handles the setup of tours & callouts.
+  It is used under the hood by the <i>Tour</i> Object and the <i>tour-start-button</i> Component,
+  but can also be used on its own for manual handling of tours.
+</p>
+
+<h2>Methods</h2>
+<p>
+  The following public methods are available on the tour service:
+</p>
+
+<ul class="list-group">
+  <li class="list-group-item">
+    {{#code-inline}}setupTour(tourId, model){{/code-inline}}: Setup a tour for the specified ID.
+    This will load the tour steps from the container, create a {{#link-to 'usage.tour-object'}}Tour Object{{/link-to}} and return it.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}addCallout(tour, calloutOptions){{/code-inline}}: Add a callout to a {{#link-to 'usage.tour-object'}}Tour Object{{/link-to}}.
+    The callout options are an object:
+
+    {{#code-block language='javascript'}}{
+  calloutTitle: 'Start a tour!', // default: 'Start a tour!'
+  calloutMessage: 'The callout message',
+  placement: 'top', //default: top
+  target: '.my-target' // or a DOM-Node
+}{{/code-block}}
+
+    Note that this will not actually show the callout.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}showCallout(id, calloutOptions, onlyUnread = true){{/code-inline}}: Manually show a callout.
+    Please refer to the <a href="http://linkedin.github.io/hopscotch" target="_blank">hopscotch.js-API</a> for details
+    about this.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}hideCallout(id){{/code-inline}}: Hide a specific callout. If no ID is specified,
+    all callouts will be hidden.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}getIsRead(id){{/code-inline}}: If a tour/callout with this ID has been ended/closed.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}setIsRead(id, isRead = true){{/code-inline}}: Set a tour/callout to isRead.
+  </li>
+</ul>
+
+<h2>Override</h2>
+<p>
+  You can also override various methods of the service.
+</p>
+
+{{#code-block language='javascript'}}// app/services/tour.js
+import TourService from 'ember-hopscotch/services/tour';
+
+export default TourService.extend({
+  _loadTour(tourId) {
+    // you can change how tours are loaded
+    // this function should return an array of steps
+  },
+  _t(str) {
+    // this function can be used to implement translation.
+    return this.get('i18n').t(str);
+  },
+  _configureHopscotch() {
+    // this function is called on init of the service
+    // it is responsible for the base hopscotch configuration
+  }
+});{{/code-block}}

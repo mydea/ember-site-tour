@@ -1,5 +1,7 @@
 # ember-hopscotch
 
+[![Build Status](https://travis-ci.org/mydea/ember-hopscotch.svg?branch=master)](https://travis-ci.org/mydea/ember-hopscotch)
+
 An ember add-on to implement site tours based on
 [hoscotch.js](http://linkedin.github.io/hopscotch).
 

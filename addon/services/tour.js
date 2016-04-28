@@ -48,10 +48,18 @@ export default Ember.Service.extend({
   init() {
     let calloutManager = hopscotch.getCalloutManager();
     this.set('_calloutManager', calloutManager);
+    this._configureHopscotch();
+  },
 
+  /**
+   * Basic configuration for hopscotch.
+   * Overwrite this if you want a different configuration.
+   *
+   * @method _configureHopscotch
+   * @private
+   */
+  _configureHopscotch() {
     hopscotch.configure({
-      bubblePadding: 0,
-      arrowWidth: 12,
       i18n: {
         nextBtn: this._t('Next'),
         prevBtn: this._t('Previous'),

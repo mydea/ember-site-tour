@@ -1,6 +1,14 @@
 import Ember from 'ember';
 const { get } = Ember;
 
+/**
+ * This mixin adds setupController functions to a route.
+ *
+ * @namespace EmberHopsotch.Mixin
+ * @class SetupControllerMixin
+ * @extends Ember.Mixin
+ * @public
+ */
 export const SetupControllerMixin = Ember.Mixin.create({
   tour: Ember.inject.service(),
 
@@ -11,6 +19,7 @@ export const SetupControllerMixin = Ember.Mixin.create({
    * @param controller
    * @param model
    * @override
+   * @public
    */
   setupController(controller, model) {
     this._super(...arguments);
@@ -21,6 +30,14 @@ export const SetupControllerMixin = Ember.Mixin.create({
   }
 });
 
+/**
+ * This mixin adds resetController functions to a route.
+ *
+ * @namespace EmberHopsotch.Mixin
+ * @class ResetControllerMixin
+ * @extends Ember.Mixin
+ * @public
+ */
 export const ResetControllerMixin = Ember.Mixin.create({
   tour: Ember.inject.service(),
 
@@ -32,6 +49,7 @@ export const ResetControllerMixin = Ember.Mixin.create({
    * @param isExiting
    * @override
    * @returns {*}
+   * @public
    */
   resetController(controller, isExiting) {
     if (isExiting) {
@@ -42,4 +60,15 @@ export const ResetControllerMixin = Ember.Mixin.create({
   }
 });
 
+/**
+ * This mixin adds setupController and resetController functions to a route
+ * to provide hooks for the tour.
+ *
+ * @namespace EmberHopsotch.Mixin
+ * @class RouteTour
+ * @extends Ember.Mixin
+ * @uses EmberHopscotch.Mixin.SetupControllerMixin
+ * @uses EmberHopscotch.Mixin.ResetControllerMixin
+ * @public
+ */
 export default Ember.Mixin.create(SetupControllerMixin, ResetControllerMixin);

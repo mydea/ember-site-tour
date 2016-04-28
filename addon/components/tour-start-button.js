@@ -125,6 +125,9 @@ export default Ember.Component.extend({
    */
   _setupEventListeners() {
     let tour = get(this, 'tour');
+    if (!tour) {
+      return;
+    }
 
     tour.on('tour.start', (e) => {
       this.sendAction('tourStarted', e);
@@ -155,6 +158,9 @@ export default Ember.Component.extend({
    */
   _tearDownEventListeners() {
     let tour = get(this, 'tour');
+    if (!tour) {
+      return;
+    }
     tour.off('tour.start');
     tour.off('tour.end');
     tour.off('tour.close');
@@ -176,7 +182,7 @@ export default Ember.Component.extend({
     let tour = get(this, 'tour');
     let callout = get(this, 'callout');
     let placement = get(this, 'calloutPlacement') || 'top';
-    let target = this.$().children()[0];
+    let [target] = this.$().children();
 
     if (tour && callout) {
       tourService.addCallout(tour, {

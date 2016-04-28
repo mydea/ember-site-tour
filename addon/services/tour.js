@@ -11,6 +11,7 @@ const { get } = Ember;
  * @namespace EmberHopscotch.Service
  * @class Tour
  * @extends Ember.Service
+ * @public
  */
 export default Ember.Service.extend({
 
@@ -46,13 +47,13 @@ export default Ember.Service.extend({
    * @param {String} id A unique id for this callout
    * @param {Object} callout The callout object
    * @param {Boolean} [onlyUnread=true] If the callout should only be shown if it is unread
+   * @public
    */
   showCallout(id, callout = {}, onlyUnread = true) {
-    const calloutManager = this.get('_calloutManager');
+    let calloutManager = this.get('_calloutManager');
 
     if (!onlyUnread || !this.getIsRead(id) && callout.target) {
-
-      const options = Ember.$.extend({
+      let options = Ember.$.extend({
         id,
         onClose: () => this.setIsRead(id)
       }, callout, true);
@@ -69,9 +70,10 @@ export default Ember.Service.extend({
    *
    * @method closeCallout
    * @param {String} id The callout id to close
+   * @public
    */
   closeCallout(id) {
-    const calloutManager = this.get('_calloutManager');
+    let calloutManager = this.get('_calloutManager');
 
     if (!id) {
       calloutManager.removeAllCallouts();
@@ -87,7 +89,8 @@ export default Ember.Service.extend({
    * @method _setupTour
    * @param tourId
    * @param model
-   * @returns {Object}
+   * @returns {EmberHopscotch.Object.Tour}
+   * @public
    */
   setupTour(tourId, model) {
     let steps = this._setupTourSteps(tourId, model);
@@ -102,6 +105,14 @@ export default Ember.Service.extend({
     return tour;
   },
 
+  /**
+   * Add a callout to a tour.
+   *
+   * @param {EmberHopscotch.Object.Tour} tour
+   * @param {Object} calloutOptions
+   * @return {EmberHopscotch.Object.Tour}
+   * @public
+   */
   addCallout(tour, {
     calloutTitle = 'Start a tour!',
     calloutMessage,
@@ -120,21 +131,20 @@ export default Ember.Service.extend({
     return tour;
   },
 
-
   /**
    * Check if a tour/callout has been read.
    *
    * @method getIsRead
    * @param {String} id The id to check
    * @return {Boolean}
+   * @public
    */
   getIsRead(id) {
     if (!window.localStorage || !id) {
       return false;
     }
 
-
-    const lsKey = get(this, '_localStorageKey');
+    let lsKey = get(this, '_localStorageKey');
     let lsData = window.localStorage.getItem(lsKey);
     if (!lsData) {
       return false;
@@ -150,13 +160,14 @@ export default Ember.Service.extend({
    * @method setIsRead
    * @param {String} id The id to set as read
    * @param {Boolean} isRead=true Set this to false if it should be unmarked
+   * @public
    */
   setIsRead(id, isRead = true) {
     if (!window.localStorage) {
       return;
     }
 
-    const lsKey = get(this, '_localStorageKey');
+    let lsKey = get(this, '_localStorageKey');
     let lsData = window.localStorage.getItem(lsKey);
     if (lsData) {
       lsData = JSON.parse(lsData);
@@ -167,6 +178,15 @@ export default Ember.Service.extend({
     window.localStorage.setItem(lsKey, JSON.stringify(lsData));
   },
 
+  /**
+   * Setup tour steps.
+   *
+   * @method _setupTourSteps
+   * @param {String} tourId The ID of the tour to load
+   * @param {Mixed} model An optional model to pass to the tour steps
+   * @returns {Object[]}
+   * @private
+   */
   _setupTourSteps(tourId, model) {
     let tourSteps = this._loadTour(tourId, model);
     return tourSteps;
@@ -230,6 +250,8 @@ export default Ember.Service.extend({
    * This is automatically called on service initialisation.
    *
    * @method init
+   * @override
+   * @protected
    */
   init() {
     let calloutManager = hopscotch.getCalloutManager();

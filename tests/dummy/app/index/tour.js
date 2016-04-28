@@ -1,33 +1,22 @@
 export default [
   {
-    target: '#first',
-    placement: 'bottom',
-    title: 'First step',
-    content: `This is the first step of the tour.`
+    target: '#installation',
+    title: 'Easy Installation',
+    content: `Just enter this command.`
   },
   {
-    target: '.second',
-    title: 'Second step',
-    content: `The second step follows.`
+    target: '#configuration',
+    title: 'Configuration',
+    content: `There are many configuration options.`
   },
   {
-    target: '#does-not-exist',
-    placement: 'bottom',
-    title: 'Skip this step',
-    content: `Non-existing selectors will be skipped. This is checked on runtime, when a tour is started.`
+    target: '#defining-tours',
+    title: 'Defining Tours',
+    content: `It is easy to define flexible & powerful tours.`
   },
   {
-    condition(model) {
-      return !!model;
-    },
-    target: '#third',
-    title: 'Skip this step',
-    content: `Skip this step if the condition returns false.`
-  },
-  {
-    target: '#third',
-    placement: 'bottom',
-    title: 'The actual third step',
-    content: `A step in between was skipped, because the selector did not exist in the DOM.`
+    target: '#starting-tours',
+    title: 'Nice to Use',
+    content: `Common usage is simple, while allowing fine grained control if necessary.`
   }
 ];

@@ -1,3 +1,5 @@
+{{title 'An ember add-on to implement site tours based on hopscotch.js'}}
+
 <div class="jumbotron text-center">
   <h1>ember-hopscotch</h1>
   <p>
@@ -19,7 +21,7 @@
 <h2 id="installation">Installation</h2>
 {{#code-block language='bash'}}ember install ember-hopscotch{{/code-block}}
 
-<h2 class="configuration">Configuration</h2>
+<h2 id="configuration">Configuration</h2>
 <p>
   By default, both hopscotch.js as well as its default styles will be included.
   You can opt out of this in your ember-cli-build.js:
@@ -63,7 +65,7 @@ export default [
   {{#link-to 'defining-tours' class='btn btn-primary'}}More Information{{/link-to}}
 </p>
 
-<h2 id="starting-tours">Starting/Using Tours</h2>
+<h2 id="starting-tours">Using Tours</h2>
 <p>
   In order to start a tour, you will need to:
 </p>
@@ -84,6 +86,10 @@ export default Ember.Route.extend(TourMixin);{{/code-block}}
 \{{#tour-start-button tour=tour}}
   &lt;button>Start Tour&lt;/button>
 \{{/tour-start-button}}{{/code-block}}
+
+<p>
+  It is also possible to start tours manually.
+</p>
 
 <p>
   {{#link-to 'usage' class='btn btn-primary'}}More Information{{/link-to}}

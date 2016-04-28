@@ -55,6 +55,7 @@
     "ember-getowner-polyfill": "1.0.1"
   },
   "ember-addon": {
-    "configPath": "tests/dummy/config"
+    "configPath": "tests/dummy/config",
+    "demoURL": "http://mydea.github.io/ember-hopscotch/"
   }
 }

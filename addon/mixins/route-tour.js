@@ -53,7 +53,10 @@ export const ResetControllerMixin = Ember.Mixin.create({
    */
   resetController(controller, isExiting) {
     if (isExiting) {
-      get(this, 'tour').closeCallout();
+      let tourService = get(this, 'tour');
+      tourService.closeCallout();
+      let tour = get(this.controllerFor(get(this, 'routeName')), 'tour');
+      tour.close();
     }
 
     return this._super(...arguments);

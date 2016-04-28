@@ -129,6 +129,19 @@ export default Ember.Object.extend(Ember.Evented, {
   },
 
   /**
+   * Close the tour.
+   *
+   * @method close
+   * @public
+   */
+  close() {
+    let id = get(this, 'tourId');
+    let normalizedId = this._normalizeHopscotchId(id);
+
+    hopscotch.endTour(normalizedId);
+  },
+
+  /**
    * Show the callout for the tour.
    * By default, only show it if it hasn't been viewed before.
    *
@@ -146,7 +159,7 @@ export default Ember.Object.extend(Ember.Evented, {
     let tour = get(this, 'tour');
     let normalizedId = this._normalizeHopscotchId(id);
 
-    if (!showAgain && tour.getIsRead(id)) {
+    if (!showAgain && tour.getIsRead(id) || this.get('status') === 'RUNNING') {
       return false;
     }
 

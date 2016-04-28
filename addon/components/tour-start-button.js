@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import layout from '../templates/components/tour-start-button';
 
-const { get } = Ember;
+const { get, set } = Ember;
 
 export default Ember.Component.extend({
 
@@ -115,6 +115,19 @@ export default Ember.Component.extend({
   calloutClosed: null,
 
   // ---------------------------------------------------------------------------------------------------------
+  // Properties
+
+  /**
+   * The timer to show the callout.
+   * This is used to cancel the timer on willDestroyElement
+   *
+   * @property _calloutTimer
+   * @type {Ember.RSVP.Promise}
+   * @private
+   */
+  _calloutTimer: null,
+
+  // ---------------------------------------------------------------------------------------------------------
   // Methods
 
   /**
@@ -191,14 +204,15 @@ export default Ember.Component.extend({
         target
       });
 
-      Ember.run.later(this, () => tour.showCallout(), 2000);
+      let timer = Ember.run.later(this, () => tour.showCallout(), 2000);
+      set(this, '_calloutTimer', timer);
     }
 
     this._setupEventListeners();
   },
 
   /**
-   * When the element is destroyed, tear down the event listeners.
+   * When the element is destroyed, tear down the event listeners & timers.
    *
    * @method willDestroyElement
    * @protected
@@ -206,6 +220,10 @@ export default Ember.Component.extend({
    */
   willDestroyElement() {
     this._tearDownEventListeners();
+    let timer = get(this, '_calloutTimer');
+    if (timer) {
+      Ember.run.cancel(timer);
+    }
   },
 
   /**

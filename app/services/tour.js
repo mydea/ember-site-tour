@@ -1,1 +1,1 @@
-export { default } from 'ember-hopscotch/services/tour';
+export { default } from 'ember-site-tour/services/tour';

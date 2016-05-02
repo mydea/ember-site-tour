@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import TourObject from 'ember-hopscotch/utils/tour';
+import TourObject from 'ember-site-tour/utils/tour';
 import { module, test } from 'qunit';
 
 module('Unit | Object | tour');

@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { ResetControllerMixin } from 'ember-hopscotch/mixins/route-tour';
+import { ResetControllerMixin } from 'ember-site-tour/mixins/route-tour';
 
 export default Ember.Route.extend(ResetControllerMixin, {
 

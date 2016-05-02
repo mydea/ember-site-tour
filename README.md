@@ -1,15 +1,15 @@
-# ember-hopscotch
+# ember-site-tour
 
-[![Build Status](https://travis-ci.org/mydea/ember-hopscotch.svg?branch=master)](https://travis-ci.org/mydea/ember-hopscotch)
+[![Build Status](https://travis-ci.org/mydea/ember-site-tour.svg?branch=master)](https://travis-ci.org/mydea/ember-site-tour)
 
 An ember add-on to implement site tours based on
 [hoscotch.js](http://linkedin.github.io/hopscotch).
 
-Documentation: [http://mydea.github.io/ember-hopscotch/](http://mydea.github.io/ember-hopscotch/)
+Documentation: [http://mydea.github.io/ember-site-tour/](http://mydea.github.io/ember-site-tour/)
 
 ## Installation
 
-`ember install ember-hopscotch`
+`ember install ember-site-tour`
 
 ## Basic Usage
 
@@ -17,7 +17,7 @@ Documentation: [http://mydea.github.io/ember-hopscotch/](http://mydea.github.io/
 // app/index/route.js
 
 import Ember from 'ember';
-import RouteTourMixin from 'ember-hopscotch/mixins/route-tour';
+import RouteTourMixin from 'ember-site-tour/mixins/route-tour';
 
 export default Ember.Route.extend(RouteTourMixin, {});
 ```
@@ -54,4 +54,4 @@ export default [
 ```
 
 For more detailed instructions and examples,
-please visit the [documentation](http://mydea.github.io/ember-hopscotch/).
+please visit the [documentation](http://mydea.github.io/ember-site-tour/).

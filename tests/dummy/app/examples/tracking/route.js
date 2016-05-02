@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import RouteTourMixin from 'ember-hopscotch/mixins/route-tour';
+import RouteTourMixin from 'ember-site-tour/mixins/route-tour';
 
 export default Ember.Route.extend(RouteTourMixin, {
 

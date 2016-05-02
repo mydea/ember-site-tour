@@ -1,1 +1,1 @@
-export { default } from 'ember-hopscotch/components/tour-start-button';
+export { default } from 'ember-site-tour/components/tour-start-button';

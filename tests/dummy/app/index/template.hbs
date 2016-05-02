@@ -1,14 +1,14 @@
 {{title 'An ember add-on to implement site tours based on hopscotch.js'}}
 
 <div class="jumbotron text-center">
-  <h1>ember-hopscotch</h1>
+  <h1>ember-site-tour</h1>
   <p>
     An ember add-on to implement site tours based on
     <a href="http://linkedin.github.io/hopscotch" target="_blank">hopscotch.js</a>.
   </p>
 
   <p>
-    {{#code-inline language='bash'}}ember install ember-hopscotch{{/code-inline}}
+    {{#code-inline language='bash'}}ember install ember-site-tour{{/code-inline}}
   </p>
 
   <p>
@@ -19,7 +19,7 @@
 </div>
 
 <h2 id="installation">Installation</h2>
-{{#code-block language='bash'}}ember install ember-hopscotch{{/code-block}}
+{{#code-block language='bash'}}ember install ember-site-tour{{/code-block}}
 
 <h2 id="configuration">Configuration</h2>
 <p>
@@ -30,7 +30,7 @@
 {{#code-block language='javascript'}}// ember-cli-build.js
 // ...
 var app = new EmberApp({
-  'ember-hopscotch': {
+  'ember-site-tour': {
     'importHopscotchJS': false,
     'importHopscotchCSS': false
   }
@@ -77,7 +77,7 @@ export default [
 
 {{#code-block language='javascript'}}// app/index/route.js
 import Ember from 'ember';
-import TourMixin from 'ember-hopscotch/mixins/route-tour';
+import TourMixin from 'ember-site-tour/mixins/route-tour';
 
 export default Ember.Route.extend(TourMixin);{{/code-block}}
 

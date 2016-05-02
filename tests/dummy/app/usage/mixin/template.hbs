@@ -24,7 +24,7 @@
 
 {{#code-block language='javascript'}}// app/index/route.js
 import Ember from 'ember';
-import TourMixin from 'ember-hopscotch/mixins/route-tour';
+import TourMixin from 'ember-site-tour/mixins/route-tour';
 
 export default Ember.Route.extend(TourMixin);{{/code-block}}
 
@@ -32,7 +32,7 @@ export default Ember.Route.extend(TourMixin);{{/code-block}}
   This mixin is just a convenience, and can be very easily changed for more complex needs. All it does is the following:
 </p>
 
-{{#code-block language='javascript'}}// ember-hopscotch/mixins/route-tour.js
+{{#code-block language='javascript'}}// ember-site-tour/mixins/route-tour.js
 import Ember from 'ember';
 const { get } = Ember;
 

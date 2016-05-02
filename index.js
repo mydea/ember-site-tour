@@ -5,7 +5,7 @@ var pickFiles = require('broccoli-static-compiler');
 var merge = require('lodash.merge');
 
 module.exports = {
-  name: 'ember-hopscotch',
+  name: 'ember-site-tour',
 
   included: function(app) {
     this._super.included(app);
@@ -14,7 +14,7 @@ module.exports = {
     var options = merge({
       'importHopscotchJS': true,
       'importHopscotchCSS': true
-    }, app.options['ember-hopscotch'] || {});
+    }, app.options['ember-site-tour'] || {});
 
     if (options.importHopscotchJS) {
       app.import(app.bowerDirectory + '/hopscotch/dist/js/hopscotch.js');
@@ -30,7 +30,7 @@ module.exports = {
 
     var options = merge({
       'importHopscotchCSS': true
-    }, this.app.options['ember-hopscotch'] || {});
+    }, this.app.options['ember-site-tour'] || {});
     
     if (!options.importHopscotchCSS) {
       return tree;

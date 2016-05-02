@@ -35,7 +35,7 @@ export default Ember.Service.extend({
    * @type {String}
    * @private
    */
-  _localStorageKey: 'ember-hopscotch',
+  _localStorageKey: 'ember-site-tour',
 
   // ---------------------------------------------------------------------------------------------------------
   // Methods

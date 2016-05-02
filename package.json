@@ -1,5 +1,5 @@
 {
-  "name": "ember-hopscotch",
+  "name": "ember-site-tour",
   "version": "0.1.0",
   "description": "An Ember add-on to add site tours based on hopscotch.js to your app.",
   "directories": {
@@ -11,7 +11,7 @@
     "start": "ember server",
     "test": "ember try:testall"
   },
-  "repository": "https://github.com/mydea/ember-hopscotch",
+  "repository": "https://github.com/mydea/ember-site-tour",
   "engines": {
     "node": ">= 0.10.0"
   },
@@ -58,6 +58,6 @@
   },
   "ember-addon": {
     "configPath": "tests/dummy/config",
-    "demoURL": "http://mydea.github.io/ember-hopscotch/"
+    "demoURL": "http://mydea.github.io/ember-site-tour/"
   }
 }

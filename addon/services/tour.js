@@ -3,7 +3,7 @@ import Ember from 'ember';
 import getOwner from 'ember-getowner-polyfill';
 import Tour from './../utils/tour';
 
-const { get } = Ember;
+const { get, computed } = Ember;
 
 /**
  * A service to handle guided tours through the interface.
@@ -17,6 +17,18 @@ export default Ember.Service.extend({
 
   // ---------------------------------------------------------------------------------------------------------
   // Properties
+
+  /**
+   * This property returns the global hopscotch variable.
+   * This makes it easy to access it via the service without needing to directly access a global.
+   *
+   * @property hopscotch
+   * @type {Object}
+   * @public
+   */
+  hopscotch: computed(function() {
+    return hopscotch;
+  }),
 
   /**
    * The callout manager to handle simple callouts.

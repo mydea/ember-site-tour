@@ -64,6 +64,20 @@
   </li>
 </ul>
 
+<h2>Properties</h2>
+<p>
+  You can access the hopscotch global via the service:
+</p>
+
+{{#code-block language='javascript'}}
+export default Ember.Route.extend({
+  tour: Ember.inject.service(),
+  doSomething() {
+    let hopscotch = this.get('tour').get('hopscotch');
+    // do something
+  }
+});{{/code-block}}
+
 <h2>Override</h2>
 <p>
   You can also override various methods of the service.

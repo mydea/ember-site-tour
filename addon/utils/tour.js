@@ -1,7 +1,7 @@
 /* globals hopscotch */
 import Ember from 'ember';
 
-const { get, set } = Ember;
+const { get, set, computed } = Ember;
 
 /**
  * A tour object.
@@ -86,6 +86,20 @@ export default Ember.Object.extend(Ember.Evented, {
    * @public
    */
   currentStep: 0,
+
+  /**
+   * If the tour has already been read/seen.
+   *
+   * @property hasBeenRead
+   * @type {Boolean}
+   * @readOnly
+   * @public
+   */
+  hasBeenRead: computed(function() {
+    let tour = get(this, 'tour');
+    let id = get(this, 'tourId');
+    return !!tour.getIsRead(id);
+  }),
 
   /**
    * The callout manager to handle simple callouts.
@@ -218,6 +232,7 @@ export default Ember.Object.extend(Ember.Evented, {
   _onEnd() {
     let tour = get(this, 'tour');
     tour.setIsRead(get(this, 'tourId'), true);
+    this.notifyPropertyChange('hasBeenRead');
 
     set(this, 'status', 'ENDED');
     this.trigger('tour.end', this._getEventData());
@@ -279,7 +294,6 @@ export default Ember.Object.extend(Ember.Evented, {
    * @private
    */
   _getEventData() {
-    let tour = get(this, 'tour');
     let id = get(this, 'tourId');
 
     return {
@@ -288,7 +302,7 @@ export default Ember.Object.extend(Ember.Evented, {
       status: get(this, 'status'),
       currentStep: get(this, 'currentStep'),
       calloutStatus: get(this, 'calloutOptions') ? get(this, 'calloutStatus') : undefined,
-      tourHasBeenEnded: !!tour.getIsRead(id),
+      tourHasBeenEnded: get(this, 'hasBeenRead'),
       toJSON() {
         return {
           id: this.id,

@@ -31,7 +31,7 @@ module.exports = {
     var options = merge({
       'importHopscotchCSS': true
     }, this.app.options['ember-site-tour'] || {});
-    
+
     if (!options.importHopscotchCSS) {
       return tree;
     }

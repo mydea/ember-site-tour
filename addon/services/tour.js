@@ -219,6 +219,7 @@ export default Ember.Service.extend({
 
     return tourData.map((step) => {
       return {
+        condition: get(step, 'condition'),
         target: get(step, 'target'),
         placement: get(step, 'placement') || 'top',
         title: this._t(get(step, 'title')),

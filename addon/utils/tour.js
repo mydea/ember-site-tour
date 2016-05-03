@@ -364,7 +364,7 @@ export default Ember.Object.extend(Ember.Evented, {
       return tourSteps;
     }
     let stepCount = tourSteps.length;
-    let stepOfStepsStr = tourManager._t('Step %step% of %stepCount%').replace('%stepCount%', stepCount);
+    let stepOfStepsStr = tourManager._t('Step %step% of %stepCount%').toString().replace('%stepCount%', stepCount);
 
     return tourSteps.map((step, i) => {
       let stepOfSteps = stepOfStepsStr.replace('%step%', i + 1);

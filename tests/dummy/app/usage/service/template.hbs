@@ -80,7 +80,7 @@ export default Ember.Route.extend({
 
 <h2>Override</h2>
 <p>
-  You can also override various methods of the service.
+  You can also override various methods/properties of the service.
 </p>
 
 {{#code-block language='javascript'}}// app/services/tour.js
@@ -98,5 +98,6 @@ export default TourService.extend({
   _configureHopscotch() {
     // this function is called on init of the service
     // it is responsible for the base hopscotch configuration
-  }
+  },
+  includeStepCount: false // do not include 'Step X of Y' in the steps
 });{{/code-block}}

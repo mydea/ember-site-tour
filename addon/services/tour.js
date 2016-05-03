@@ -49,6 +49,17 @@ export default Ember.Service.extend({
    */
   _localStorageKey: 'ember-site-tour',
 
+  /**
+   * If this is set to false,
+   * do not include 'Step X of Y' in the steps.
+   *
+   * @property includeStepCount
+   * @type {Boolean}
+   * @default {true}
+   * @public
+   */
+  includeStepCount: true,
+
   // ---------------------------------------------------------------------------------------------------------
   // Methods
 

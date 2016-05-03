@@ -360,11 +360,14 @@ export default Ember.Object.extend(Ember.Evented, {
    */
   _addTourStepCount(tourSteps) {
     let tourService = get(this, 'tour');
+    if (!tourService.get('includeStepCount')) {
+      return tourSteps;
+    }
     let stepCount = tourSteps.length;
-    let stepOfStepsStr = tourService._t('Step {{step}} of {{of}}').replace('{{of}}', stepCount);
+    let stepOfStepsStr = tourService._t('Step %step% of %stepCount%').replace('%stepCount%', stepCount);
 
     return tourSteps.map((step, i) => {
-      let stepOfSteps = stepOfStepsStr.replace('{{step}}', i + 1);
+      let stepOfSteps = stepOfStepsStr.replace('%step%', i + 1);
       return Ember.$.extend({}, step, {
         content: step.content + `<div class='hopscotch-pagination'>${stepOfSteps}</div>`
       });

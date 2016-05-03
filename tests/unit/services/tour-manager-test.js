@@ -1,6 +1,6 @@
 import { moduleFor, test } from 'ember-qunit';
 
-moduleFor('service:tour', 'Unit | Service | tour', {
+moduleFor('service:tour-manager', 'Unit | Service | tour-manager', {
   // Specify the other units that are required for this test.
   // needs: ['service:foo']
 });

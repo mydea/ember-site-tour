@@ -4,7 +4,7 @@ import { module, test } from 'qunit';
 
 module('Unit | Mixin | route tour');
 
-const MockTourService = Ember.Object.extend({
+const MockTourManagerService = Ember.Object.extend({
   setupTour(id, model) {
     return {
       id,
@@ -17,7 +17,7 @@ test('setting up a tour works', function(assert) {
   let RouteTourObject = Ember.Object.extend(RouteTourMixin);
   let subject = RouteTourObject.create({
     routeName: 'test-route.index',
-    tour: MockTourService.create()
+    tourManager: MockTourManagerService.create()
   });
 
   let controller = Ember.Object.create();

@@ -4,7 +4,7 @@ import { module, test } from 'qunit';
 
 module('Unit | Object | tour');
 
-const MockTourService = Ember.Object.extend({
+const MockTourManagerService = Ember.Object.extend({
   _t(str) {
     return str;
   },
@@ -20,7 +20,7 @@ const MockTourService = Ember.Object.extend({
 
 test('normalizing the ID works', function(assert) {
   let subject = TourObject.create({
-    tour: MockTourService.create(),
+    tourManager: MockTourManagerService.create(),
     tourId: 'my-tour.index',
     steps: [],
     model: undefined
@@ -29,21 +29,49 @@ test('normalizing the ID works', function(assert) {
   assert.equal(subject._normalizeHopscotchId('my-tour.index'), 'my-tour-index');
 });
 
-test('adding the tour step count works', function(assert) {
+test('no step count is added if includeStepCount is not true on servcie', function(assert) {
+  let steps = [
+    {
+      content: 'Test content'
+    },
+    {
+      content: 'Test content'
+    },
+    {
+      content: 'Test content'
+    }
+  ];
+
   let subject = TourObject.create({
-    tour: MockTourService.create(),
+    tourManager: MockTourManagerService.create(),
     tourId: 'my-tour.index',
-    steps: [
-      {
-        content: 'Test content'
-      },
-      {
-        content: 'Test content'
-      },
-      {
-        content: 'Test content'
-      }
-    ]
+    steps
+  });
+
+  let paginatedSteps = subject._addTourStepCount(subject.get('steps'));
+  assert.deepEqual(paginatedSteps, steps);
+
+});
+
+test('adding the tour step count works if includeStepCount is true on service', function(assert) {
+  let steps = [
+    {
+      content: 'Test content'
+    },
+    {
+      content: 'Test content'
+    },
+    {
+      content: 'Test content'
+    }
+  ];
+
+  let subject = TourObject.create({
+    tourManager: MockTourManagerService.create({
+      includeStepCount: true
+    }),
+    tourId: 'my-tour.index',
+    steps
   });
 
   let stepsTarget = [
@@ -64,7 +92,7 @@ test('adding the tour step count works', function(assert) {
 
 test('checking steps works', function(assert) {
   let subject = TourObject.create({
-    tour: MockTourService.create(),
+    tourManager: MockTourManagerService.create(),
     tourId: 'my-tour.index',
     model: Ember.Object.create({
       condition1: true,
@@ -106,7 +134,7 @@ test('checking steps works', function(assert) {
 
 test('event data is correctly built', function(assert) {
   let subject = TourObject.create({
-    tour: MockTourService.create(),
+    tourManager: MockTourManagerService.create(),
     tourId: 'my-tour.index',
     status: 'RUNNING'
   });
@@ -126,7 +154,7 @@ test('tour.start event is correctly emitted', function(assert) {
   assert.expect(3);
 
   let subject = TourObject.create({
-    tour: MockTourService.create(),
+    tourManager: MockTourManagerService.create(),
     tourId: 'my-tour.index',
     status: 'INACTIVE'
   });
@@ -150,7 +178,7 @@ test('tour.end event is correctly emitted', function(assert) {
   assert.expect(3);
 
   let subject = TourObject.create({
-    tour: MockTourService.create(),
+    tourManager: MockTourManagerService.create(),
     tourId: 'my-tour.index',
     status: 'INACTIVE'
   });
@@ -175,7 +203,7 @@ test('tour.close event is correctly emitted', function(assert) {
   let done = assert.async();
 
   let subject = TourObject.create({
-    tour: MockTourService.create(),
+    tourManager: MockTourManagerService.create(),
     tourId: 'my-tour.index',
     status: 'RUNNING'
   });
@@ -202,7 +230,7 @@ test('tour.close is not emitted if the tour is ended', function(assert) {
   let done = assert.async();
 
   let subject = TourObject.create({
-    tour: MockTourService.create(),
+    tourManager: MockTourManagerService.create(),
     tourId: 'my-tour.index',
     status: 'ENDED'
   });
@@ -219,7 +247,7 @@ test('callout.show event is correctly emitted', function(assert) {
   assert.expect(3);
 
   let subject = TourObject.create({
-    tour: MockTourService.create(),
+    tourManager: MockTourManagerService.create(),
     tourId: 'my-tour.index',
     status: 'INACTIVE',
     calloutOptions: {}
@@ -245,7 +273,7 @@ test('callout.close event is correctly emitted', function(assert) {
   let done = assert.async();
 
   let subject = TourObject.create({
-    tour: MockTourService.create(),
+    tourManager: MockTourManagerService.create(),
     tourId: 'my-tour.index',
     status: 'INACTIVE',
     calloutStatus: 'SHOWN',
@@ -274,7 +302,7 @@ test('callout.close event is not emitted if callout is not shown', function(asse
   let done = assert.async();
 
   let subject = TourObject.create({
-    tour: MockTourService.create(),
+    tourManager: MockTourManagerService.create(),
     tourId: 'my-tour.index',
     status: 'INACTIVE',
     calloutStatus: 'INACTIVE',

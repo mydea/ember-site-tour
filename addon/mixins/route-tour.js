@@ -10,7 +10,7 @@ const { get } = Ember;
  * @public
  */
 export const SetupControllerMixin = Ember.Mixin.create({
-  tour: Ember.inject.service(),
+  tourManager: Ember.inject.service(),
 
   /**
    * Setup a tour object on the controller, available for usage.
@@ -25,7 +25,7 @@ export const SetupControllerMixin = Ember.Mixin.create({
     this._super(...arguments);
 
     let tourName = get(this, 'routeName');
-    let tour = get(this, 'tour').setupTour(tourName, model);
+    let tour = get(this, 'tourManager').setupTour(tourName, model);
     controller.set('tour', tour);
   }
 });
@@ -39,7 +39,7 @@ export const SetupControllerMixin = Ember.Mixin.create({
  * @public
  */
 export const ResetControllerMixin = Ember.Mixin.create({
-  tour: Ember.inject.service(),
+  tourManager: Ember.inject.service(),
 
   /**
    * Close all visible callouts.
@@ -53,8 +53,8 @@ export const ResetControllerMixin = Ember.Mixin.create({
    */
   resetController(controller, isExiting) {
     if (isExiting) {
-      let tourService = get(this, 'tour');
-      tourService.closeCallout();
+      let tourManager = get(this, 'tourManager');
+      tourManager.closeCallout();
       let tour = get(controller, 'tour');
       if (tour) {
         tour.close();

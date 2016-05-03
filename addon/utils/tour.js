@@ -14,7 +14,7 @@ const { get, set, computed } = Ember;
  */
 export default Ember.Object.extend(Ember.Evented, {
 
-  tour: Ember.inject.service(),
+  tourManager: Ember.inject.service(),
 
   /**
    * The ID of the tour.
@@ -96,9 +96,9 @@ export default Ember.Object.extend(Ember.Evented, {
    * @public
    */
   hasBeenRead: computed(function() {
-    let tour = get(this, 'tour');
+    let tourManager = get(this, 'tourManager');
     let id = get(this, 'tourId');
-    return !!tour.getIsRead(id);
+    return !!tourManager.getIsRead(id);
   }),
 
   /**
@@ -170,10 +170,10 @@ export default Ember.Object.extend(Ember.Evented, {
     }
     let { id } = calloutOptions;
     let calloutManager = this.get('_calloutManager');
-    let tour = get(this, 'tour');
+    let tourManager = get(this, 'tourManager');
     let normalizedId = this._normalizeHopscotchId(id);
 
-    if (!showAgain && tour.getIsRead(id) || this.get('status') === 'RUNNING') {
+    if (!showAgain && tourManager.getIsRead(id) || this.get('status') === 'RUNNING') {
       return false;
     }
 
@@ -230,8 +230,8 @@ export default Ember.Object.extend(Ember.Evented, {
    * @private
    */
   _onEnd() {
-    let tour = get(this, 'tour');
-    tour.setIsRead(get(this, 'tourId'), true);
+    let tourManager = get(this, 'tourManager');
+    tourManager.setIsRead(get(this, 'tourId'), true);
     this.notifyPropertyChange('hasBeenRead');
 
     set(this, 'status', 'ENDED');
@@ -245,8 +245,8 @@ export default Ember.Object.extend(Ember.Evented, {
    * @private
    */
   _onClose() {
-    let tour = get(this, 'tour');
-    tour.setIsRead(get(this, 'tourId'), true);
+    let tourManager = get(this, 'tourManager');
+    tourManager.setIsRead(get(this, 'tourId'), true);
 
     Ember.run.next(() => {
       if (get(this, 'status') !== 'ENDED') {
@@ -274,8 +274,8 @@ export default Ember.Object.extend(Ember.Evented, {
    * @private
    */
   _onCalloutClose() {
-    let tour = get(this, 'tour');
-    tour.setIsRead(get(this, 'calloutOptions.id'), true);
+    let tourManager = get(this, 'tourManager');
+    tourManager.setIsRead(get(this, 'calloutOptions.id'), true);
 
     Ember.run.next(() => {
       if (get(this, 'calloutStatus') === 'SHOWN') {
@@ -359,12 +359,12 @@ export default Ember.Object.extend(Ember.Evented, {
    * @private
    */
   _addTourStepCount(tourSteps) {
-    let tourService = get(this, 'tour');
-    if (!tourService.get('includeStepCount')) {
+    let tourManager = get(this, 'tourManager');
+    if (!tourManager.get('includeStepCount')) {
       return tourSteps;
     }
     let stepCount = tourSteps.length;
-    let stepOfStepsStr = tourService._t('Step %step% of %stepCount%').replace('%stepCount%', stepCount);
+    let stepOfStepsStr = tourManager._t('Step %step% of %stepCount%').replace('%stepCount%', stepCount);
 
     return tourSteps.map((step, i) => {
       let stepOfSteps = stepOfStepsStr.replace('%step%', i + 1);

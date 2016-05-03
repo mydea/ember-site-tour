@@ -10,7 +10,7 @@ export default Ember.Component.extend({
 
   layout,
 
-  tourService: Ember.inject.service('tour'),
+  tourManager: Ember.inject.service('tourManager'),
 
   // ---------------------------------------------------------------------------------------------------------
   // Attributes
@@ -191,14 +191,14 @@ export default Ember.Component.extend({
    * @override
    */
   didInsertElement() {
-    let tourService = get(this, 'tourService');
+    let tourManager = get(this, 'tourManager');
     let tour = get(this, 'tour');
     let callout = get(this, 'callout');
     let placement = get(this, 'calloutPlacement') || 'top';
     let [target] = this.$().children();
 
     if (tour && callout) {
-      tourService.addCallout(tour, {
+      tourManager.addCallout(tour, {
         calloutMessage: callout,
         placement,
         target

@@ -29,7 +29,7 @@ import TourMixin from 'ember-site-tour/mixins/route-tour';
 export default Ember.Route.extend(TourMixin);{{/code-block}}
 
 <p>
-  This mixin is just a convenience, and can be very easily changed for more complex needs. All it does is the following:
+  This mixin is just a convenience, and can be very easily changed for more complex needs. It basically does the following:
 </p>
 
 {{#code-block language='javascript'}}// ember-site-tour/mixins/route-tour.js
@@ -37,17 +37,27 @@ import Ember from 'ember';
 const { get } = Ember;
 
 export default Ember.Mixin.create({
-  tour: Ember.inject.service(),
+  tourManager: Ember.inject.service(),
 
   setupController(controller, model) {
     this._super(...arguments);
 
     let tourName = get(this, 'routeName');
-    let tour = this.get('tour').setupTour(tourName, model);
+    let tour = this.get('tourManager').setupTour(tourName, model);
     controller.set('tour', tour);
   }
 });{{/code-block}}
 
 <p>
-  In addition, the mixin will also hide all callouts on <i>resetController</i>.
+  In addition, the mixin will also hide all callouts & running tours on <i>resetController</i>.
 </p>
+
+<p>
+  It is also possible to just include the <i>resetController</i> or <i>setupController</i> parts on their own:
+</p>
+
+{{#code-block language='javascript'}}// app/index/route.js
+import Ember from 'ember';
+import { ResetControllerMixin, SetupControllerMixin } from 'ember-site-tour/mixins/route-tour';
+
+export default Ember.Route.extend(SetupControllerMixin, ResetControllerMixin);{{/code-block}}

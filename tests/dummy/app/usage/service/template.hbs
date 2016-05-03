@@ -1,4 +1,4 @@
-{{title 'Service'}}
+{{title 'TourManager Service'}}
 
 <ol class="breadcrumb">
   <li class="active">
@@ -16,17 +16,17 @@
   </li>
 </ol>
 
-<h1>tour Service</h1>
+<h1>TourManager Service</h1>
 
 <p>
-  The tour service handles the setup of tours & callouts.
+  The tour-manager service handles the setup of tours & callouts.
   It is used under the hood by the <i>Tour</i> Object and the <i>tour-start-button</i> Component,
   but can also be used on its own for manual handling of tours.
 </p>
 
 <h2>Methods</h2>
 <p>
-  The following public methods are available on the tour service:
+  The following public methods are available on the tour-manager service:
 </p>
 
 <ul class="list-group">
@@ -71,9 +71,9 @@
 
 {{#code-block language='javascript'}}
 export default Ember.Route.extend({
-  tour: Ember.inject.service(),
+  tourManager: Ember.inject.service(),
   doSomething() {
-    let hopscotch = this.get('tour').get('hopscotch');
+    let hopscotch = this.get('tourManager').get('hopscotch');
     // do something
   }
 });{{/code-block}}
@@ -84,9 +84,9 @@ export default Ember.Route.extend({
 </p>
 
 {{#code-block language='javascript'}}// app/services/tour.js
-import TourService from 'ember-site-tour/services/tour';
+import TourManagerService from 'ember-site-tour/services/tour-manager';
 
-export default TourService.extend({
+export default TourManagerService.extend({
   _loadTour(tourId) {
     // you can change how tours are loaded
     // this function should return an array of steps

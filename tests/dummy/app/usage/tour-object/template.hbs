@@ -19,7 +19,7 @@
 <h1>Tour Object</h1>
 
 <p>
-  You can create a new tour object via the {{#link-to 'usage.service'}}tour Service's{{/link-to}} <i>setupTour()</i>
+  You can create a new tour object via the {{#link-to 'usage.service'}}TourManager{{/link-to}} Service's <i>setupTour()</i>
   function.
 </p>
 
@@ -49,6 +49,16 @@
 </p>
 
 <ul class="list-group">
+  <li class="list-group-item">
+    {{#code-inline}}status{{/code-inline}}: The current status of the tour. One of: INACTIVE, RUNNING, ENDED, CANCELED
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}currentStep{{/code-inline}}: The current (0-based) step of the tour.
+  </li>
+  <li class="list-group-item">
+    {{#code-inline}}calloutStatus{{/code-inline}}: The current status of the callout. One of: INACTIVE, SHOWN, CLOSED, AUTOCLOSED
+    (= the callout was closed because the user started the tour)
+  </li>
   <li class="list-group-item">
     {{#code-inline}}hasBeenRead{{/code-inline}}: If the tour has been ended/closed before.
   </li>
@@ -93,7 +103,3 @@
                                // AUTOCLOSED means that the callout was closed because the user started the tour
   tourHasBeenEnded: false // if the tour has ever been ended/closed before
 }{{/code-block}}
-
-<p>
-  status, currentStep & calloutStatus are also available as properties on the Object.
-</p>

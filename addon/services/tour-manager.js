@@ -9,7 +9,7 @@ const { get, computed } = Ember;
  * A service to handle guided tours through the interface.
  *
  * @namespace EmberHopscotch.Service
- * @class Tour
+ * @class TourManager
  * @extends Ember.Service
  * @public
  */

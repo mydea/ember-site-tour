@@ -3,13 +3,13 @@ import { ResetControllerMixin } from 'ember-site-tour/mixins/route-tour';
 
 export default Ember.Route.extend(ResetControllerMixin, {
 
-  tour: Ember.inject.service(),
+  tourManager: Ember.inject.service(),
 
   activate() {
     Ember.run.later(this, () => {
-      let tour = this.get('tour');
+      let tourManager = this.get('tourManager');
 
-      tour.showCallout('tour-start-button-callout', {
+      tourManager.showCallout('tour-start-button-callout', {
         target: document.querySelector('#callout'),
         title: 'This is a callout',
         content: 'It is positioned next to an element',

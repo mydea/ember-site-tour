@@ -1,5 +1,10 @@
 # Changelog
 
+v0.3.1
+
+* [BUGFIX] Do not use array deconstructing on jQuery collections
+* [BUGFIX] Auto-convert the result of `._t()` with `.toString()` to make it work with SafeStrings
+
 ## v0.3.0
 
 * [BREAKING] Rename tour service to tour-manager

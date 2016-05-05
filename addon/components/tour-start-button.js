@@ -195,9 +195,9 @@ export default Ember.Component.extend({
     let tour = get(this, 'tour');
     let callout = get(this, 'callout');
     let placement = get(this, 'calloutPlacement') || 'top';
-    let [target] = this.$().children();
+    let target = this.$().children().get(0);
 
-    if (tour && callout) {
+    if (tour && callout && target) {
       tourManager.addCallout(tour, {
         calloutMessage: callout,
         placement,

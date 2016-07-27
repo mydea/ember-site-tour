@@ -16,12 +16,17 @@ module.exports = {
       'importHopscotchCSS': true
     }, app.options['ember-site-tour'] || {});
 
+    // In nested addons, app.bowerDirectory might not be available
+    var bowerDirectory = app.bowerDirectory || 'bower_components';
+    // In ember-cli < 2.7, this.import is not available, so fall back to use app.import
+    var importShim = typeof this.import !== 'undefined' ? this : app;
+
     if (options.importHopscotchJS) {
-      app.import(app.bowerDirectory + '/hopscotch/dist/js/hopscotch.js');
+      importShim.import(bowerDirectory + '/hopscotch/dist/js/hopscotch.js');
     }
 
     if (options.importHopscotchCSS) {
-      app.import('vendor/hopscotch.css');
+      importShim.import('vendor/hopscotch.css');
     }
   },
 

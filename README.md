@@ -1,6 +1,7 @@
 # ember-site-tour
 
 [![Build Status](https://travis-ci.org/mydea/ember-site-tour.svg?branch=master)](https://travis-ci.org/mydea/ember-site-tour)
+[![Ember Observer Score](https://emberobserver.com/badges/ember-site-tour.svg)](https://emberobserver.com/addons/ember-site-tour)
 
 An ember add-on to implement site tours based on
 [hoscotch.js](http://linkedin.github.io/hopscotch).

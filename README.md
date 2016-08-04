@@ -4,7 +4,7 @@
 [![Ember Observer Score](https://emberobserver.com/badges/ember-site-tour.svg)](https://emberobserver.com/addons/ember-site-tour)
 
 An ember add-on to implement site tours based on
-[hoscotch.js](http://linkedin.github.io/hopscotch).
+[hopscotch.js](http://linkedin.github.io/hopscotch).
 
 Documentation: [http://mydea.github.io/ember-site-tour/](http://mydea.github.io/ember-site-tour/)
 

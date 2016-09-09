@@ -16,6 +16,7 @@ Router.map(function() {
   this.route('examples', function() {
     this.route('tracking');
     this.route('simple');
+    this.route('engines');
   });
 });
 

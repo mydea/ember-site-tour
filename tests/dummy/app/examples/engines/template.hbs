@@ -1,0 +1,71 @@
+{{title 'Engines'}}
+
+<ol class="breadcrumb">
+  <li class="active">
+    {{#link-to 'index'}}
+      Home
+    {{/link-to}}
+  </li>
+  <li>
+    {{#link-to 'examples'}}
+      Examples
+    {{/link-to}}
+  </li>
+  <li class="active">
+    Engines
+  </li>
+</ol>
+
+<h1>Engines</h1>
+
+<p>
+  In order to use ember-site-tour with engines, you might need to do a few adaptions.
+</p>
+
+<p>
+  The main issue is that under the hood, the service uses getOwner() and _lookupFactory() to get the defined tours.
+  However, if you are in an engine, and pass down the tourManager service, _lookupFactory will not work anymore, because
+  the owner is actually the host app, not the engine.
+  This makes it necessary to override the owner in the engine.
+</p>
+
+<p>
+  Since 0.4.0, this can easiliy be done with the following snippet:
+</p>
+
+{{#code-block language='javascript'}}// app/services/tour-manager.js
+import Ember from 'ember';
+import TourManagerService from 'ember-site-tour/services/tour-manager';
+
+export default TourManagerService.extend({
+  _owner: null,
+
+  owner: Ember.computed('_owner', function() {
+    return Ember.get(this, '_owner') || Ember.getOwner(this);
+  }),
+});
+{{/code-block}}
+
+
+{{#code-block language='javascript'}}// lib/your-engine/addon/application/route.js
+import Ember from 'ember';
+
+export default Ember.Route.extend({
+  tourManager: Ember.inject.service(),
+
+  activate() {
+    this._super(...arguments);
+    let tourManager = this.get('tourManager');
+    tourManager.set('_owner', Ember.getOwner(this));
+  },
+
+  deactivate() {
+    this._super(...arguments);
+    let tourManager = this.get('tourManager');
+    tourManager.set('_owner', undefined);
+  }
+});{{/code-block}}
+
+<p>
+  Basically, this sets the _owner property to the engine when entering the engine's application route, and resets it when leaving it.
+</p>

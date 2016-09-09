@@ -2,8 +2,14 @@
 import Ember from 'ember';
 import getOwner from 'ember-getowner-polyfill';
 import Tour from './../utils/tour';
+import $ from 'jquery';
 
-const { get, computed } = Ember;
+const {
+  get,
+  computed,
+  Service,
+  A: array
+} = Ember;
 
 /**
  * A service to handle guided tours through the interface.
@@ -13,7 +19,7 @@ const { get, computed } = Ember;
  * @extends Ember.Service
  * @public
  */
-export default Ember.Service.extend({
+export default Service.extend({
 
   // ---------------------------------------------------------------------------------------------------------
   // Properties
@@ -28,6 +34,17 @@ export default Ember.Service.extend({
    */
   hopscotch: computed(function() {
     return hopscotch;
+  }),
+
+  /**
+   * This can be overwritten if necessary, e.g. for engines.
+   *
+   * @property owner
+   * @type {Object}
+   * @protected
+   */
+  owner: computed(function() {
+    return getOwner(this);
   }),
 
   /**
@@ -76,7 +93,7 @@ export default Ember.Service.extend({
     let calloutManager = this.get('_calloutManager');
 
     if (!onlyUnread || !this.getIsRead(id) && callout.target) {
-      let options = Ember.$.extend({
+      let options = $.extend({
         id,
         onClose: () => this.setIsRead(id)
       }, callout, true);
@@ -117,9 +134,10 @@ export default Ember.Service.extend({
    */
   setupTour(tourId, model) {
     let steps = this._setupTourSteps(tourId, model);
+    let owner = get(this, 'owner');
 
     let tour = Tour.create(
-      getOwner(this).ownerInjection(), {
+      owner.ownerInjection(), {
         tourId,
         steps,
         model
@@ -225,8 +243,9 @@ export default Ember.Service.extend({
    * @private
    */
   _loadTour(tourId) {
-    let tourData = getOwner(this)._lookupFactory(`tour:${tourId}`) || [];
-    tourData = Ember.A(tourData);
+    let owner = get(this, 'owner');
+    let tourData = owner._lookupFactory(`tour:${tourId}`) || [];
+    tourData = array(tourData);
 
     return tourData.map((step) => {
       return {

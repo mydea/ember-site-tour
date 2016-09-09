@@ -1,16 +1,22 @@
 import Ember from 'ember';
 import layout from '../templates/components/tour-start-button';
 
-const { get, set } = Ember;
+const {
+  get,
+  set,
+  Component,
+  inject,
+  run
+} = Ember;
 
-export default Ember.Component.extend({
+export default Component.extend({
 
   // ---------------------------------------------------------------------------------------------------------
   // Properties
 
   layout,
 
-  tourManager: Ember.inject.service('tourManager'),
+  tourManager: inject.service('tourManager'),
 
   // ---------------------------------------------------------------------------------------------------------
   // Attributes
@@ -204,7 +210,7 @@ export default Ember.Component.extend({
         target
       });
 
-      let timer = Ember.run.later(this, () => tour.showCallout(), 2000);
+      let timer = run.later(this, () => tour.showCallout(), 2000);
       set(this, '_calloutTimer', timer);
     }
 
@@ -222,7 +228,7 @@ export default Ember.Component.extend({
     this._tearDownEventListeners();
     let timer = get(this, '_calloutTimer');
     if (timer) {
-      Ember.run.cancel(timer);
+      run.cancel(timer);
     }
   },
 

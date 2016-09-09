@@ -1,7 +1,19 @@
 /* globals hopscotch */
 import Ember from 'ember';
+import $ from 'jquery';
 
-const { get, set, computed } = Ember;
+const {
+  get,
+  set,
+  computed,
+  Object: EmberObject,
+  Evented,
+  inject,
+  A: array,
+  run,
+  String: EmberString,
+  typeOf: getTypeOf
+} = Ember;
 
 /**
  * A tour object.
@@ -12,9 +24,9 @@ const { get, set, computed } = Ember;
  * @uses Ember.Evented
  * @public
  */
-export default Ember.Object.extend(Ember.Evented, {
+export default EmberObject.extend(Evented, {
 
-  tourManager: Ember.inject.service(),
+  tourManager: inject.service(),
 
   /**
    * The ID of the tour.
@@ -34,7 +46,7 @@ export default Ember.Object.extend(Ember.Evented, {
    * @required
    * @public
    */
-  steps: Ember.A(),
+  steps: array(),
 
   /**
    * A model to observe for changes.
@@ -182,7 +194,7 @@ export default Ember.Object.extend(Ember.Evented, {
         calloutManager.removeCallout(normalizedId);
       }
 
-      calloutOptions = Ember.$.extend({}, calloutOptions, {
+      calloutOptions = $.extend({}, calloutOptions, {
         id: normalizedId,
         onClose: () => this._onCalloutClose()
       });
@@ -248,7 +260,7 @@ export default Ember.Object.extend(Ember.Evented, {
     let tourManager = get(this, 'tourManager');
     tourManager.setIsRead(get(this, 'tourId'), true);
 
-    Ember.run.next(() => {
+    run.next(() => {
       if (get(this, 'status') !== 'ENDED') {
         set(this, 'status', 'CANCELED');
         this.trigger('tour.close', this._getEventData());
@@ -277,7 +289,7 @@ export default Ember.Object.extend(Ember.Evented, {
     let tourManager = get(this, 'tourManager');
     tourManager.setIsRead(get(this, 'calloutOptions.id'), true);
 
-    Ember.run.next(() => {
+    run.next(() => {
       if (get(this, 'calloutStatus') === 'SHOWN') {
         set(this, 'calloutStatus', 'CLOSED');
         this.trigger('callout.close', this._getEventData());
@@ -327,12 +339,12 @@ export default Ember.Object.extend(Ember.Evented, {
     let steps = get(this, 'steps');
     let model = get(this, 'model');
 
-    let tour = Ember.A();
+    let tour = array();
     steps.forEach((step) => {
       let target = get(step, 'target');
-      let targetElement = Ember.typeOf(target) === 'string' ? document.querySelector(target) : target;
+      let targetElement = getTypeOf(target) === 'string' ? document.querySelector(target) : target;
       let condition = get(step, 'condition');
-      let showStep = Ember.typeOf(condition) === 'function' ? condition(model) : true;
+      let showStep = getTypeOf(condition) === 'function' ? condition(model) : true;
 
       // Only add the step if the target-selector exists in the DOM and if a condition function is not returning false
       if (targetElement && showStep) {
@@ -368,7 +380,7 @@ export default Ember.Object.extend(Ember.Evented, {
 
     return tourSteps.map((step, i) => {
       let stepOfSteps = stepOfStepsStr.replace('%step%', i + 1);
-      return Ember.$.extend({}, step, {
+      return $.extend({}, step, {
         content: step.content + `<div class='hopscotch-pagination'>${stepOfSteps}</div>`
       });
     });
@@ -384,7 +396,7 @@ export default Ember.Object.extend(Ember.Evented, {
    * @private
    */
   _normalizeHopscotchId(id) {
-    return Ember.String.dasherize(Ember.String.classify(id));
+    return EmberString.dasherize(EmberString.classify(id));
   },
 
   /**

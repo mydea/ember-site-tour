@@ -1,5 +1,10 @@
 import Ember from 'ember';
-const { get } = Ember;
+
+const {
+  get,
+  Mixin,
+  inject
+} = Ember;
 
 /**
  * This mixin adds setupController functions to a route.
@@ -9,8 +14,8 @@ const { get } = Ember;
  * @extends Ember.Mixin
  * @public
  */
-export const SetupControllerMixin = Ember.Mixin.create({
-  tourManager: Ember.inject.service(),
+export const SetupControllerMixin = Mixin.create({
+  tourManager: inject.service(),
 
   /**
    * Setup a tour object on the controller, available for usage.
@@ -38,8 +43,8 @@ export const SetupControllerMixin = Ember.Mixin.create({
  * @extends Ember.Mixin
  * @public
  */
-export const ResetControllerMixin = Ember.Mixin.create({
-  tourManager: Ember.inject.service(),
+export const ResetControllerMixin = Mixin.create({
+  tourManager: inject.service(),
 
   /**
    * Close all visible callouts.
@@ -77,4 +82,4 @@ export const ResetControllerMixin = Ember.Mixin.create({
  * @uses EmberHopscotch.Mixin.ResetControllerMixin
  * @public
  */
-export default Ember.Mixin.create(SetupControllerMixin, ResetControllerMixin);
+export default Mixin.create(SetupControllerMixin, ResetControllerMixin);

@@ -13,7 +13,7 @@ module.exports = {
     // Setup default options
     var options = merge({
       'importHopscotchJS': true,
-      'importHopscotchCSS': true
+      'importHopscotchCSS': false
     }, app.options['ember-site-tour'] || {});
 
     // In nested addons, app.bowerDirectory might not be available
@@ -33,15 +33,18 @@ module.exports = {
   treeForPublic: function(tree) {
     this._requireBuildPackages();
 
+    var appOptions = (this.app && this.app.options) ? this.app.options : {};
+    var bowerDirectory = appOptions.bowerDirectory || 'bower_components';
+
     var options = merge({
-      'importHopscotchCSS': true
-    }, this.app.options['ember-site-tour'] || {});
+      'importHopscotchCSS': false
+    }, appOptions['ember-site-tour'] || {});
 
     if (!options.importHopscotchCSS) {
       return tree;
     }
 
-    tree = pickFiles(this.app.bowerDirectory + '/hopscotch/dist/img', {
+    tree = pickFiles(bowerDirectory + '/hopscotch/dist/img', {
       srcDir: '/',
       files: ['*.png'],
       destDir: '/assets/img'

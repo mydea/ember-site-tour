@@ -7,6 +7,10 @@ module.exports = function(defaults) {
     'ember-bootstrap': {
       'importBootstrapTheme': true
     },
+    'ember-site-tour': {
+      importHopscotchJS: true,
+      importHopscotchCSS: true
+    },
     'ember-prism': {
       'theme': 'twilight',
       'components': ['bash', 'handlebars', 'javascript'],

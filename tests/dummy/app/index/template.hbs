@@ -23,8 +23,8 @@
 
 <h2 id="configuration">Configuration</h2>
 <p>
-  By default, both hopscotch.js as well as its default styles will be included.
-  You can opt out of this in your ember-cli-build.js:
+  By default, hopscotch.js is included, but not the associated CSS.
+  You can opt out of the JS / opt in to the CSS in your ember-cli-build.js:
 </p>
 
 {{#code-block language='javascript'}}// ember-cli-build.js
@@ -32,7 +32,7 @@
 var app = new EmberApp({
   'ember-site-tour': {
     'importHopscotchJS': false,
-    'importHopscotchCSS': false
+    'importHopscotchCSS': true
   }
 });
 // ...{{/code-block}}

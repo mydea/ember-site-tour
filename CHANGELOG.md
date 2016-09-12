@@ -1,5 +1,11 @@
 # Changelog
 
+v0.4.0
+
+* [BREAKING] Change default behavior to not import CSS - explicitly set `importHopscotchCSS=true` in your ember-cli-build.js!
+* [FEATURE] Make owner an overwrite-able computed property
+* [DOCS] Add docs about usage with Engines
+
 v0.3.1
 
 * [BUGFIX] Do not use array deconstructing on jQuery collections

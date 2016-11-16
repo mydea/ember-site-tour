@@ -1,12 +1,18 @@
 import Ember from 'ember';
 import { ResetControllerMixin } from 'ember-site-tour/mixins/route-tour';
 
-export default Ember.Route.extend(ResetControllerMixin, {
+const {
+  Route,
+  inject,
+  run
+} = Ember;
 
-  tourManager: Ember.inject.service(),
+export default Route.extend(ResetControllerMixin, {
+
+  tourManager: inject.service(),
 
   activate() {
-    Ember.run.later(this, () => {
+    run.later(this, () => {
       let tourManager = this.get('tourManager');
 
       tourManager.showCallout('tour-start-button-callout', {

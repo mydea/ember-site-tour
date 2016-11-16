@@ -1,13 +1,18 @@
 import Ember from 'ember';
 import RouteTourMixin from 'ember-site-tour/mixins/route-tour';
+import $ from 'jquery';
 
-export default Ember.Route.extend(RouteTourMixin, {
+const {
+  Route
+} = Ember;
+
+export default Route.extend(RouteTourMixin, {
 
   _trackEvent(eventName, data) {
-    let $log = Ember.$('#tracking-log');
+    let $log = $('#tracking-log');
     let dataStr = `{ id: ${data.id}, status: ${data.status}, currentStep: ${data.currentStep}, calloutStatus: ${data.calloutStatus}, tourHasBeenEnded: ${data.tourHasBeenEnded} }`;
 
-    $log.append(Ember.$(`<li>${eventName}: ${dataStr}</li>`));
+    $log.append($(`<li>${eventName}: ${dataStr}</li>`));
   },
 
   actions: {

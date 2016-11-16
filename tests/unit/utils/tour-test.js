@@ -2,9 +2,14 @@ import Ember from 'ember';
 import TourObject from 'ember-site-tour/utils/tour';
 import { module, test } from 'qunit';
 
+const {
+  Object: EmberObject,
+  run
+} = Ember;
+
 module('Unit | Object | tour');
 
-const MockTourManagerService = Ember.Object.extend({
+const MockTourManagerService = EmberObject.extend({
   _t(str) {
     return str;
   },
@@ -94,7 +99,7 @@ test('checking steps works', function(assert) {
   let subject = TourObject.create({
     tourManager: MockTourManagerService.create(),
     tourId: 'my-tour.index',
-    model: Ember.Object.create({
+    model: EmberObject.create({
       condition1: true,
       condition2: false
     }),
@@ -240,7 +245,7 @@ test('tour.close is not emitted if the tour is ended', function(assert) {
   });
 
   subject._onClose();
-  Ember.run.later(this, () => done(), 2);
+  run.later(this, () => done(), 2);
 });
 
 test('callout.show event is correctly emitted', function(assert) {
@@ -314,5 +319,5 @@ test('callout.close event is not emitted if callout is not shown', function(asse
   });
 
   subject._onCalloutClose();
-  Ember.run.later(this, () => done(), 2);
+  run.later(this, () => done(), 2);
 });

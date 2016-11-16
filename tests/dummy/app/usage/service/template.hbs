@@ -53,8 +53,8 @@
     about this.
   </li>
   <li class="list-group-item">
-    {{#code-inline}}closeCallout(id){{/code-inline}}: Hide a specific callout. If no ID is specified,
-    all callouts will be hidden.
+    {{#code-inline}}closeCallout(id, setIsRead = true){{/code-inline}}: Hide a specific callout. If no ID is specified,
+    all callouts will be hidden. If setIsRead is true (default), it will also be set to isRead and not appear again.
   </li>
   <li class="list-group-item">
     {{#code-inline}}getIsRead(id){{/code-inline}}: If a tour/callout with this ID has been ended/closed.

@@ -110,16 +110,19 @@ export default Service.extend({
    *
    * @method closeCallout
    * @param {String} id The callout id to close
+   * @param {Boolean} setIsRead If the callout should be auto-set to isRead
    * @public
    */
-  closeCallout(id) {
+  closeCallout(id, setIsRead = true) {
     let calloutManager = this.get('_calloutManager');
 
     if (!id) {
       calloutManager.removeAllCallouts();
     } else {
       calloutManager.removeCallout(id);
-      this.setIsRead(id);
+      if (setIsRead) {
+        this.setIsRead(id);
+      }
     }
   },
 

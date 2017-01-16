@@ -1,5 +1,9 @@
 # Changelog
 
+v0.4.1
+
+* Catch error if LocalStorage is not available
+
 v0.4.0
 
 * [BREAKING] Change default behavior to not import CSS - explicitly set `importHopscotchCSS=true` in your ember-cli-build.js!

@@ -189,7 +189,12 @@ export default Service.extend({
     }
 
     let lsKey = get(this, '_localStorageKey');
-    let lsData = window.localStorage.getItem(lsKey);
+    let lsData = null;
+    try {
+      lsData = window.localStorage.getItem(lsKey);
+    } catch (e) {
+      console.error('Could not read from local storage.', e);
+    }
     if (!lsData) {
       return false;
     }
@@ -219,7 +224,13 @@ export default Service.extend({
       lsData = {};
     }
     lsData[id] = isRead;
-    window.localStorage.setItem(lsKey, JSON.stringify(lsData));
+
+    try {
+      window.localStorage.setItem(lsKey, JSON.stringify(lsData));
+    } catch (e) {
+      console.error('Could not save to local storage.', e);
+    }
+
   },
 
   /**

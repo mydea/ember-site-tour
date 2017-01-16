@@ -1,8 +1,12 @@
 # Changelog
 
-v0.4.1
+v0.4.2
 
 * Catch error if LocalStorage is not available
+
+v0.4.1
+
+* Add optional `setIsRead` option to `closeCallout` method
 
 v0.4.0
 

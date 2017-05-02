@@ -1,6 +1,5 @@
 /* globals hopscotch */
 import Ember from 'ember';
-import getOwner from 'ember-getowner-polyfill';
 import Tour from './../utils/tour';
 import $ from 'jquery';
 
@@ -8,7 +7,8 @@ const {
   get,
   computed,
   Service,
-  A: array
+  A: array,
+  getOwner
 } = Ember;
 
 /**
@@ -93,10 +93,10 @@ export default Service.extend({
     let calloutManager = this.get('_calloutManager');
 
     if (!onlyUnread || !this.getIsRead(id) && callout.target) {
-      let options = $.extend({
+      let options = $.extend(true, {
         id,
         onClose: () => this.setIsRead(id)
-      }, callout, true);
+      }, callout);
 
       if (calloutManager.getCallout(id)) {
         calloutManager.removeCallout(id);

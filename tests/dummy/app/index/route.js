@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import Ember from 'ember';
 import RouteTourMixin from 'ember-site-tour/mixins/route-tour';
 

@@ -1,5 +1,11 @@
 # Changelog
 
+v0.5.0
+
+* Remove ember-getowner-polyfill
+* [INTERNAL] Update dependencies
+* [INTERNAL] Use ember-cli-eslint instead of ember-cli-jshint
+
 v0.4.2
 
 * Catch error if LocalStorage is not available

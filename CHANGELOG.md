@@ -1,5 +1,13 @@
 # Changelog
 
+v1.0.0
+
+* Use new `getOwner(this).factoryFor()` method. This required Ember >= 2.13, or you'll need to manually install https://github.com/rwjblue/ember-factory-for-polyfill
+* Allow tours to be defined as arrays, functions or Ember.Objects. 
+  * The function is expected to return an array in the same format
+  * The Ember.Object is expected to have a `tours` property which contains an array in the same format
+* [INTERNAL] Use eslint-plugin-ember-suave instead of ember-suave
+
 v0.5.0
 
 * Remove ember-getowner-polyfill

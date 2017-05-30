@@ -81,13 +81,13 @@ test('adding the tour step count works if includeStepCount is true on service', 
 
   let stepsTarget = [
     {
-      content: `Test content<div class='hopscotch-pagination'>Step 1 of 3</div>`
+      content: "Test content<div class='hopscotch-pagination'>Step 1 of 3</div>"
     },
     {
-      content: `Test content<div class='hopscotch-pagination'>Step 2 of 3</div>`
+      content: "Test content<div class='hopscotch-pagination'>Step 2 of 3</div>"
     },
     {
-      content: `Test content<div class='hopscotch-pagination'>Step 3 of 3</div>`
+      content: "Test content<div class='hopscotch-pagination'>Step 3 of 3</div>"
     }
   ];
 

@@ -39,7 +39,7 @@
     "ember-prism": "~0.0.8",
     "ember-resolver": "~4.1.0",
     "ember-source": "~2.13.0",
-    "ember-suave": "~4.0.1",
+    "eslint-plugin-ember-suave": "^1.0.0",
     "loader.js": "~4.3.0"
   },
   "keywords": [

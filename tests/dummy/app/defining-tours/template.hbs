@@ -97,3 +97,40 @@ export default [
     content: `Skip this step if the condition returns false.`
   }
 ];{{/code-block}}
+
+<p>
+  Alternatively, you can also export a function that returns an array in the same format:
+</p>
+
+{{#code-block language='javascript'}}// app/index/tour.js
+export default function() {
+  return [
+    {
+      target: '#first',
+      placement: 'bottom',
+      title: 'First step',
+      content: `This is the first step of the tour.`
+    }
+  ];
+}{{/code-block}}
+
+<p>
+  Or, you can export an Ember.Object that has a 'tour' property:
+</p>
+
+
+{{#code-block language='javascript'}}// app/index/tour.js
+export default Ember.Object.extend({
+
+  tour: Ember.computed(function() {
+    return [
+      {
+        target: '#first',
+        placement: 'bottom',
+        title: 'First step',
+        content: `This is the first step of the tour.`
+      }
+    ];
+  })
+
+});{{/code-block}}

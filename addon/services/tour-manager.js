@@ -8,7 +8,8 @@ const {
   computed,
   Service,
   A: array,
-  getOwner
+  getOwner,
+  typeOf: getTypeOf
 } = Ember;
 
 /**
@@ -192,7 +193,7 @@ export default Service.extend({
     let lsData = null;
     try {
       lsData = window.localStorage.getItem(lsKey);
-    } catch (e) {
+    } catch(e) {
       console.error('Could not read from local storage.', e);
     }
     if (!lsData) {
@@ -227,7 +228,7 @@ export default Service.extend({
 
     try {
       window.localStorage.setItem(lsKey, JSON.stringify(lsData));
-    } catch (e) {
+    } catch(e) {
       console.error('Could not save to local storage.', e);
     }
 
@@ -258,8 +259,23 @@ export default Service.extend({
    */
   _loadTour(tourId) {
     let owner = get(this, 'owner');
-    let tourData = owner._lookupFactory(`tour:${tourId}`) || [];
-    tourData = array(tourData);
+    let tourData = owner.factoryFor(`tour:${tourId}`) || [];
+
+    let tourArray = [];
+    let tourInstance;
+    switch (getTypeOf(tourData.class)) {
+      case 'array':
+        tourArray = tourData.class;
+        break;
+      case 'function':
+        tourArray = tourData.class(tourId);
+        break;
+      case 'class':
+        tourInstance = tourData.create({ tourId });
+        tourArray = get(tourInstance, 'tour') || [];
+    }
+
+    tourData = array(tourArray);
 
     return tourData.map((step) => {
       return {

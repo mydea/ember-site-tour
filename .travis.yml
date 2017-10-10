@@ -1,9 +1,8 @@
 ---
 language: node_js
 node_js:
-  # we recommend testing addons with the same minimum supported node version as Ember CLI
-  # so that your addon works for all apps
-  - "4"
+ # revert to node 4 once https://github.com/kybishop/ember-popper/pull/45 is merged and released
+   - "6"
 
 sudo: false
 dist: trusty

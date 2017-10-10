@@ -194,7 +194,7 @@ export default Service.extend({
     try {
       lsData = window.localStorage.getItem(lsKey);
     } catch(e) {
-      console.error('Could not read from local storage.', e);
+      console.error('Could not read from local storage.', e); //eslint-disable-line
     }
     if (!lsData) {
       return false;
@@ -229,7 +229,7 @@ export default Service.extend({
     try {
       window.localStorage.setItem(lsKey, JSON.stringify(lsData));
     } catch(e) {
-      console.error('Could not save to local storage.', e);
+      console.error('Could not save to local storage.', e); //eslint-disable-line
     }
 
   },

@@ -1,5 +1,10 @@
 # Changelog
 
+v1.1.0
+
+* Use npm dependency instead of bower dependency for hopscotch - you can remove it from bower!
+* [INTERNAL] Update dependencies
+
 v1.0.0
 
 * Use new `getOwner(this).factoryFor()` method. This required Ember >= 2.13, or you'll need to manually install https://github.com/rwjblue/ember-factory-for-polyfill

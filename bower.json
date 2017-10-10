@@ -1,8 +1,6 @@
 {
   "name": "ember-site-tour",
   "dependencies": {
-    "hopscotch": "~0.2.8",
-    "bootstrap": "~3.3.5",
-    "prism": "~1.6.0"
+    "hopscotch": "~0.2.8"
   }
 }

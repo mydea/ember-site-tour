@@ -1,0 +1,6 @@
+/* Overwrite base image paths */
+
+div.hopscotch-bubble .hopscotch-bubble-close,
+div.hopscotch-bubble .hopscotch-bubble-number {
+  background-image: url(./img/sprite-green.png);
+}

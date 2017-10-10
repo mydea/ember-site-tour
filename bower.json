@@ -1,6 +1,0 @@
-{
-  "name": "ember-site-tour",
-  "dependencies": {
-    "hopscotch": "~0.2.8"
-  }
-}

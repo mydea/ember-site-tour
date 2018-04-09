@@ -44,7 +44,9 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-    // here you can enable a production-specific feature
+    // This is for ember-cli-github-pages
+    ENV.locationType = 'hash';
+    ENV.rootURL = '/ember-site-tour/';
   }
 
   return ENV;

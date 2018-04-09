@@ -7,6 +7,7 @@ import { inject as service } from '@ember/service';
 import { next } from '@ember/runloop';
 import { typeOf as getTypeOf } from '@ember/utils';
 import { dasherize, classify } from '@ember/string';
+import { Promise } from 'rsvp';
 
 /**
  * A tour object.
@@ -133,8 +134,8 @@ export default EmberObject.extend(Evented, {
       steps,
       onClose: () => this._onClose(),
       onEnd: () => this._onEnd(),
-      onNext: () => set(this, 'currentStep', hopscotch.getCurrStepNum()),
-      onPrev: () => set(this, 'currentStep', hopscotch.getCurrStepNum())
+      onNext: () => this._gotoNextStep(),
+      onPrev: () => this._gotoPrevStep()
     };
 
     if (get(this, 'calloutStatus') === 'SHOWN') {
@@ -145,6 +146,18 @@ export default EmberObject.extend(Evented, {
     let currentStep = hopscotch.getCurrStepNum();
     set(this, 'currentStep', currentStep);
     this._onStart();
+
+    return new Promise((resolve) => next(this, resolve));
+  },
+
+  _gotoNextStep() {
+    set(this, 'currentStep', hopscotch.getCurrStepNum());
+    return new Promise((resolve) => next(resolve));
+  },
+
+  _gotoPrevStep() {
+    set(this, 'currentStep', hopscotch.getCurrStepNum());
+    return new Promise((resolve) => next(resolve));
   },
 
   /**
@@ -321,7 +334,7 @@ export default EmberObject.extend(Evented, {
   },
 
   /**
-   * Check which steps are currenctly available due to available DOM nodes and condition functions.
+   * Check which steps are currently available due to available DOM nodes and condition functions.
    * This will set the internal _steps property accordingly
    *
    * @method _checkSteps

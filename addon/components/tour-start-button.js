@@ -13,9 +13,12 @@ export default Component.extend({
   layout,
 
   tourManager: service('tourManager'),
+  attributeBindings: ['data-test-start-tour'],
 
   // ---------------------------------------------------------------------------------------------------------
   // Attributes
+
+  'data-test-start-tour': true,
 
   /**
    * The tour object for this button.

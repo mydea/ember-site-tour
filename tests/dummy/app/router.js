@@ -18,6 +18,7 @@ Router.map(function() {
     this.route('tracking');
     this.route('simple');
     this.route('engines');
+    this.route('tests');
   });
 });
 

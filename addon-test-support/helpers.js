@@ -27,7 +27,7 @@ export function getTourContent() {
   let content = document.querySelector('.hopscotch-content').innerHTML;
 
   // We want to remove the "step x of x" part
-  let regex = /(.*)(<div class="hopscotch-pagination" data-test-site-tour-step="2">.*<\/div>)/gi;
+  let regex = /(.*)(<div class="hopscotch-pagination" data-test-site-tour-step="\d*">.*<\/div>)/gi;
   return content.replace(regex, '$1').trim();
 }
 

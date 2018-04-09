@@ -3,6 +3,7 @@ import { visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import {
   startTour,
+  waitForStep,
   tourNextStep,
   getTourElement,
   getTourTitle,
@@ -20,6 +21,7 @@ module('Acceptance | tour', function(hooks) {
     await tourNextStep(1);
 
     // Check if the test helpers work
+    await waitForStep(2);
     assert.ok(getTourElement());
     assert.equal(getTourTitle(), 'Configuration', 'title is correct');
     assert.equal(getTourContent(), 'There are many configuration options.', 'content is correct');

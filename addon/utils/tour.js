@@ -1,12 +1,12 @@
 /* globals hopscotch */
 import Evented from '@ember/object/evented';
 import { A as array } from '@ember/array';
-import $ from 'jquery';
 import EmberObject, { get, set, computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { next } from '@ember/runloop';
 import { typeOf as getTypeOf } from '@ember/utils';
 import { dasherize, classify } from '@ember/string';
+import { assign } from '@ember/polyfills';
 import { Promise } from 'rsvp';
 
 /**
@@ -200,7 +200,7 @@ export default EmberObject.extend(Evented, {
         calloutManager.removeCallout(normalizedId);
       }
 
-      calloutOptions = $.extend({}, calloutOptions, {
+      calloutOptions = assign({}, calloutOptions, {
         id: normalizedId,
         onClose: () => this._onCalloutClose()
       });
@@ -386,7 +386,7 @@ export default EmberObject.extend(Evented, {
 
     return tourSteps.map((step, i) => {
       let stepOfSteps = stepOfStepsStr.replace('%step%', i + 1);
-      return $.extend({}, step, {
+      return assign({}, step, {
         content: `${step.content}<div class='hopscotch-pagination' data-test-site-tour-step="${i + 1}">${stepOfSteps}</div>`
       });
     });

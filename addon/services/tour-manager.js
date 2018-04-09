@@ -1,12 +1,11 @@
 /* globals hopscotch */
 import { computed, get } from '@ember/object';
-
 import Service from '@ember/service';
 import { A as array } from '@ember/array';
 import { getOwner } from '@ember/application';
 import { typeOf as getTypeOf } from '@ember/utils';
 import Tour from './../utils/tour';
-import $ from 'jquery';
+import { assign } from '@ember/polyfills';
 
 /**
  * A service to handle guided tours through the interface.
@@ -90,7 +89,7 @@ export default Service.extend({
     let calloutManager = this.get('_calloutManager');
 
     if (!onlyUnread || !this.getIsRead(id) && callout.target) {
-      let options = $.extend(true, {
+      let options = assign({
         id,
         onClose: () => this.setIsRead(id)
       }, callout);

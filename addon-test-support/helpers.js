@@ -5,9 +5,13 @@ export async function startTour(context) {
   await click(button);
 }
 
-export async function tourNextStep(step) {
+export async function waitForStep(step) {
   let selector = step ? `[data-test-site-tour-step="${step}"]` : '[data-test-site-tour-step]';
   await waitUntil(() => document.querySelector(selector)); // Use waitUntil instead of waitFor, as this is outside of the test scope
+}
+
+export async function tourNextStep(step) {
+  await waitForStep(step);
   await click(document.querySelector('.hopscotch-next'));
 }
 
@@ -16,13 +20,14 @@ export function getTourElement() {
 }
 
 export function getTourTitle() {
-  return document.querySelector('.hopscotch-title').innerText.trim();
+  return document.querySelector('.hopscotch-title').innerHTML.trim();
 }
 
-export function getTourContent(regex = /(.*)(Step \d* of \d*)/gi) {
-  let content = document.querySelector('.hopscotch-content').innerText.trim();
+export function getTourContent() {
+  let content = document.querySelector('.hopscotch-content').innerHTML;
 
   // We want to remove the "step x of x" part
+  let regex = /(.*)(<div class="hopscotch-pagination" data-test-site-tour-step="2">.*<\/div>)/gi;
   return content.replace(regex, '$1').trim();
 }
 

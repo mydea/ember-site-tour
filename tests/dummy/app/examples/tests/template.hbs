@@ -26,6 +26,7 @@
 import {
   startTour,
   tourNextStep,
+  waitForStep,
   getTourElement,
   getTourTitle,
   getTourContent,
@@ -43,6 +44,7 @@ module('Acceptance | tour', function(hooks) {
     await tourNextStep(1);
 
     // Check if the test helpers work
+    await waitForStep(2);
     assert.ok(getTourElement());
     assert.equal(getTourTitle(), 'Configuration', 'title is correct');
     assert.equal(getTourContent(), 'There are many configuration options.', 'content is correct');

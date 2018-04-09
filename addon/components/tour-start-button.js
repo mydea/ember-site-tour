@@ -1,7 +1,7 @@
 import { inject as service } from '@ember/service';
 import { set, get } from '@ember/object';
 import Component from '@ember/component';
-import { run } from '@ember/runloop';
+import { later, cancel } from '@ember/runloop';
 import layout from '../templates/components/tour-start-button';
 import { typeOf as getTypeOf } from '@ember/utils';
 
@@ -210,7 +210,9 @@ export default Component.extend({
     let tour = get(this, 'tour');
     let callout = get(this, 'callout');
     let placement = get(this, 'calloutPlacement') || 'top';
-    let target = this.$().children().get(0);
+
+    let { element } = this;
+    let [target] = element.children;
 
     if (tour && callout && target) {
       tourManager.addCallout(tour, {
@@ -219,7 +221,7 @@ export default Component.extend({
         target
       });
 
-      let timer = run.later(this, () => tour.showCallout(), 2000);
+      let timer = later(this, () => tour.showCallout(), 2000);
       set(this, '_calloutTimer', timer);
     }
 
@@ -237,7 +239,7 @@ export default Component.extend({
     this._tearDownEventListeners();
     let timer = get(this, '_calloutTimer');
     if (timer) {
-      run.cancel(timer);
+      cancel(timer);
     }
   },
 

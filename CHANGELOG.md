@@ -1,5 +1,9 @@
 # Changelog
 
+v1.1.2
+
+* Fix regex for `getTourContent` test helper
+
 v1.1.1
 
 * Stop using jQuery

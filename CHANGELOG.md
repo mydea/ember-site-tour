@@ -1,5 +1,9 @@
 # Changelog
 
+v1.1.3
+
+* Ensure tours are always correctly setup/destroyed
+
 v1.1.2
 
 * Fix regex for `getTourContent` test helper

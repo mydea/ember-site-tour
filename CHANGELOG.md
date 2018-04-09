@@ -1,5 +1,18 @@
 # Changelog
 
+v1.1.1
+
+* Stop using jQuery
+* Update dependencies
+* Add test helpers, e.g. `import { startTour } from 'ember-site-tour/test-support/helpers';`:
+  * `startTour`
+  * `waitForStep`
+  * `tourNextStep`
+  * `getTourElement`
+  * `getTourTitle`
+  * `getTourContent`
+  * `getTourStep`
+
 v1.1.0
 
 * Use npm dependency instead of bower dependency for hopscotch - you can remove it from bower!

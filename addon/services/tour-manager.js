@@ -1,16 +1,12 @@
 /* globals hopscotch */
-import Ember from 'ember';
+import { computed, get } from '@ember/object';
+
+import Service from '@ember/service';
+import { A as array } from '@ember/array';
+import { getOwner } from '@ember/application';
+import { typeOf as getTypeOf } from '@ember/utils';
 import Tour from './../utils/tour';
 import $ from 'jquery';
-
-const {
-  get,
-  computed,
-  Service,
-  A: array,
-  getOwner,
-  typeOf: getTypeOf
-} = Ember;
 
 /**
  * A service to handle guided tours through the interface.
@@ -330,6 +326,8 @@ export default Service.extend({
     let calloutManager = hopscotch.getCalloutManager();
     this.set('_calloutManager', calloutManager);
     this._configureHopscotch();
+
+    this._super(...arguments);
   }
 
 });

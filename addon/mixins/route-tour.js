@@ -1,10 +1,6 @@
-import Ember from 'ember';
-
-const {
-  get,
-  Mixin,
-  inject
-} = Ember;
+import { inject as service } from '@ember/service';
+import { get } from '@ember/object';
+import Mixin from '@ember/object/mixin';
 
 /**
  * This mixin adds setupController functions to a route.
@@ -15,7 +11,7 @@ const {
  * @public
  */
 export const SetupControllerMixin = Mixin.create({
-  tourManager: inject.service(),
+  tourManager: service(),
 
   /**
    * Setup a tour object on the controller, available for usage.
@@ -44,7 +40,7 @@ export const SetupControllerMixin = Mixin.create({
  * @public
  */
 export const ResetControllerMixin = Mixin.create({
-  tourManager: inject.service(),
+  tourManager: service(),
 
   /**
    * Close all visible callouts.

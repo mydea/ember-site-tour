@@ -1,172 +1,145 @@
-import Ember from 'ember';
 import TourObject from 'ember-site-tour/utils/tour';
 import { module, test } from 'qunit';
+import EmberObject from '@ember/object';
+import { run } from '@ember/runloop';
 
-const {
-  Object: EmberObject,
-  run
-} = Ember;
+module('Unit | Object | tour', function() {
+  const MockTourManagerService = EmberObject.extend({
+    _t(str) {
+      return str;
+    },
 
-module('Unit | Object | tour');
+    getIsRead(id) {
+      return !!id;
+    },
 
-const MockTourManagerService = EmberObject.extend({
-  _t(str) {
-    return str;
-  },
-
-  getIsRead(id) {
-    return !!id;
-  },
-
-  setIsRead(id) {
-    return !!id;
-  }
-});
-
-test('normalizing the ID works', function(assert) {
-  let subject = TourObject.create({
-    tourManager: MockTourManagerService.create(),
-    tourId: 'my-tour.index',
-    steps: [],
-    model: undefined
+    setIsRead(id) {
+      return !!id;
+    }
   });
 
-  assert.equal(subject._normalizeHopscotchId('my-tour.index'), 'my-tour-index');
-});
+  test('normalizing the ID works', function(assert) {
+    let subject = TourObject.create({
+      tourManager: MockTourManagerService.create(),
+      tourId: 'my-tour.index',
+      steps: [],
+      model: undefined
+    });
 
-test('no step count is added if includeStepCount is not true on servcie', function(assert) {
-  let steps = [
-    {
-      content: 'Test content'
-    },
-    {
-      content: 'Test content'
-    },
-    {
-      content: 'Test content'
-    }
-  ];
-
-  let subject = TourObject.create({
-    tourManager: MockTourManagerService.create(),
-    tourId: 'my-tour.index',
-    steps
+    assert.equal(subject._normalizeHopscotchId('my-tour.index'), 'my-tour-index');
   });
 
-  let paginatedSteps = subject._addTourStepCount(subject.get('steps'));
-  assert.deepEqual(paginatedSteps, steps);
-
-});
-
-test('adding the tour step count works if includeStepCount is true on service', function(assert) {
-  let steps = [
-    {
-      content: 'Test content'
-    },
-    {
-      content: 'Test content'
-    },
-    {
-      content: 'Test content'
-    }
-  ];
-
-  let subject = TourObject.create({
-    tourManager: MockTourManagerService.create({
-      includeStepCount: true
-    }),
-    tourId: 'my-tour.index',
-    steps
-  });
-
-  let stepsTarget = [
-    {
-      content: "Test content<div class='hopscotch-pagination'>Step 1 of 3</div>"
-    },
-    {
-      content: "Test content<div class='hopscotch-pagination'>Step 2 of 3</div>"
-    },
-    {
-      content: "Test content<div class='hopscotch-pagination'>Step 3 of 3</div>"
-    }
-  ];
-
-  let paginatedSteps = subject._addTourStepCount(subject.get('steps'));
-  assert.deepEqual(paginatedSteps, stepsTarget);
-});
-
-test('checking steps works', function(assert) {
-  let subject = TourObject.create({
-    tourManager: MockTourManagerService.create(),
-    tourId: 'my-tour.index',
-    model: EmberObject.create({
-      condition1: true,
-      condition2: false
-    }),
-    steps: [
+  test('no step count is added if includeStepCount is not true on servcie', function(assert) {
+    let steps = [
       {
-        target: {},
-        title: 'Step 1',
         content: 'Test content'
       },
       {
-        target: {},
-        condition(model) {
-          return model.get('condition1');
-        },
-        title: 'Step 2',
         content: 'Test content'
       },
       {
-        target: {},
-        condition(model) {
-          return model.get('condition2');
-        },
-        title: 'Step 3',
-        content: 'Test content'
-      },
-      {
-        target: null,
-        title: 'Step 4',
         content: 'Test content'
       }
-    ]
+    ];
+
+    let subject = TourObject.create({
+      tourManager: MockTourManagerService.create(),
+      tourId: 'my-tour.index',
+      steps
+    });
+
+    let paginatedSteps = subject._addTourStepCount(subject.get('steps'));
+    assert.deepEqual(paginatedSteps, steps);
+
   });
 
-  subject._checkSteps();
-  assert.equal(subject.get('_steps').length, 2, '2 steps remain');
-});
+  test('adding the tour step count works if includeStepCount is true on service', function(assert) {
+    let steps = [
+      {
+        content: 'Test content'
+      },
+      {
+        content: 'Test content'
+      },
+      {
+        content: 'Test content'
+      }
+    ];
 
-test('event data is correctly built', function(assert) {
-  let subject = TourObject.create({
-    tourManager: MockTourManagerService.create(),
-    tourId: 'my-tour.index',
-    status: 'RUNNING'
+    let subject = TourObject.create({
+      tourManager: MockTourManagerService.create({
+        includeStepCount: true
+      }),
+      tourId: 'my-tour.index',
+      steps
+    });
+
+    let stepsTarget = [
+      {
+        content: `Test content<div class='hopscotch-pagination' data-test-site-tour-step="1">Step 1 of 3</div>`
+      },
+      {
+        content: `Test content<div class='hopscotch-pagination' data-test-site-tour-step="2">Step 2 of 3</div>`
+      },
+      {
+        content: `Test content<div class='hopscotch-pagination' data-test-site-tour-step="3">Step 3 of 3</div>`
+      }
+    ];
+
+    let paginatedSteps = subject._addTourStepCount(subject.get('steps'));
+    assert.deepEqual(paginatedSteps, stepsTarget);
   });
 
-  let e = subject._getEventData();
-  assert.deepEqual(e.toJSON(), {
-    id: 'my-tour.index',
-    status: 'RUNNING',
-    currentStep: 0,
-    calloutStatus: undefined,
-    tourHasBeenEnded: true
+  test('checking steps works', function(assert) {
+    let subject = TourObject.create({
+      tourManager: MockTourManagerService.create(),
+      tourId: 'my-tour.index',
+      model: EmberObject.create({
+        condition1: true,
+        condition2: false
+      }),
+      steps: [
+        {
+          target: {},
+          title: 'Step 1',
+          content: 'Test content'
+        },
+        {
+          target: {},
+          condition(model) {
+            return model.get('condition1');
+          },
+          title: 'Step 2',
+          content: 'Test content'
+        },
+        {
+          target: {},
+          condition(model) {
+            return model.get('condition2');
+          },
+          title: 'Step 3',
+          content: 'Test content'
+        },
+        {
+          target: null,
+          title: 'Step 4',
+          content: 'Test content'
+        }
+      ]
+    });
+
+    subject._checkSteps();
+    assert.equal(subject.get('_steps').length, 2, '2 steps remain');
   });
-  assert.equal(e.tour, subject);
-});
 
-test('tour.start event is correctly emitted', function(assert) {
-  assert.expect(3);
+  test('event data is correctly built', function(assert) {
+    let subject = TourObject.create({
+      tourManager: MockTourManagerService.create(),
+      tourId: 'my-tour.index',
+      status: 'RUNNING'
+    });
 
-  let subject = TourObject.create({
-    tourManager: MockTourManagerService.create(),
-    tourId: 'my-tour.index',
-    status: 'INACTIVE'
-  });
-
-  subject.on('tour.start', function(e) {
-    assert.ok('tour.start event is emitted');
-    assert.ok(arguments.length, 1, 'one argument is passed to the function.');
+    let e = subject._getEventData();
     assert.deepEqual(e.toJSON(), {
       id: 'my-tour.index',
       status: 'RUNNING',
@@ -174,150 +147,173 @@ test('tour.start event is correctly emitted', function(assert) {
       calloutStatus: undefined,
       tourHasBeenEnded: true
     });
+    assert.equal(e.tour, subject);
   });
 
-  subject._onStart();
-});
+  test('tour.start event is correctly emitted', function(assert) {
+    assert.expect(3);
 
-test('tour.end event is correctly emitted', function(assert) {
-  assert.expect(3);
-
-  let subject = TourObject.create({
-    tourManager: MockTourManagerService.create(),
-    tourId: 'my-tour.index',
-    status: 'INACTIVE'
-  });
-
-  subject.on('tour.end', function(e) {
-    assert.ok('tour.end event is emitted');
-    assert.ok(arguments.length, 1, 'one argument is passed to the function.');
-    assert.deepEqual(e.toJSON(), {
-      id: 'my-tour.index',
-      status: 'ENDED',
-      currentStep: 0,
-      calloutStatus: undefined,
-      tourHasBeenEnded: true
-    });
-  });
-
-  subject._onEnd();
-});
-
-test('tour.close event is correctly emitted', function(assert) {
-  assert.expect(3);
-  let done = assert.async();
-
-  let subject = TourObject.create({
-    tourManager: MockTourManagerService.create(),
-    tourId: 'my-tour.index',
-    status: 'RUNNING'
-  });
-
-  subject.on('tour.close', function(e) {
-    assert.ok('tour.close event is emitted');
-    assert.ok(arguments.length, 1, 'one argument is passed to the function.');
-    assert.deepEqual(e.toJSON(), {
-      id: 'my-tour.index',
-      status: 'CANCELED',
-      currentStep: 0,
-      calloutStatus: undefined,
-      tourHasBeenEnded: true
+    let subject = TourObject.create({
+      tourManager: MockTourManagerService.create(),
+      tourId: 'my-tour.index',
+      status: 'INACTIVE'
     });
 
-    done();
+    subject.on('tour.start', function(e) {
+      assert.ok('tour.start event is emitted');
+      assert.ok(arguments.length, 1, 'one argument is passed to the function.');
+      assert.deepEqual(e.toJSON(), {
+        id: 'my-tour.index',
+        status: 'RUNNING',
+        currentStep: 0,
+        calloutStatus: undefined,
+        tourHasBeenEnded: true
+      });
+    });
+
+    subject._onStart();
   });
 
-  subject._onClose();
-});
+  test('tour.end event is correctly emitted', function(assert) {
+    assert.expect(3);
 
-test('tour.close is not emitted if the tour is ended', function(assert) {
-  assert.expect(0);
-  let done = assert.async();
+    let subject = TourObject.create({
+      tourManager: MockTourManagerService.create(),
+      tourId: 'my-tour.index',
+      status: 'INACTIVE'
+    });
 
-  let subject = TourObject.create({
-    tourManager: MockTourManagerService.create(),
-    tourId: 'my-tour.index',
-    status: 'ENDED'
+    subject.on('tour.end', function(e) {
+      assert.ok('tour.end event is emitted');
+      assert.ok(arguments.length, 1, 'one argument is passed to the function.');
+      assert.deepEqual(e.toJSON(), {
+        id: 'my-tour.index',
+        status: 'ENDED',
+        currentStep: 0,
+        calloutStatus: undefined,
+        tourHasBeenEnded: true
+      });
+    });
+
+    subject._onEnd();
   });
 
-  subject.on('tour.close', function() {
-    assert.notOk(true, 'tour.close event is not emitted');
+  test('tour.close event is correctly emitted', function(assert) {
+    assert.expect(3);
+    let done = assert.async();
+
+    let subject = TourObject.create({
+      tourManager: MockTourManagerService.create(),
+      tourId: 'my-tour.index',
+      status: 'RUNNING'
+    });
+
+    subject.on('tour.close', function(e) {
+      assert.ok('tour.close event is emitted');
+      assert.ok(arguments.length, 1, 'one argument is passed to the function.');
+      assert.deepEqual(e.toJSON(), {
+        id: 'my-tour.index',
+        status: 'CANCELED',
+        currentStep: 0,
+        calloutStatus: undefined,
+        tourHasBeenEnded: true
+      });
+
+      done();
+    });
+
+    subject._onClose();
   });
 
-  subject._onClose();
-  run.later(this, () => done(), 2);
-});
+  test('tour.close is not emitted if the tour is ended', function(assert) {
+    assert.expect(0);
+    let done = assert.async();
 
-test('callout.show event is correctly emitted', function(assert) {
-  assert.expect(3);
+    let subject = TourObject.create({
+      tourManager: MockTourManagerService.create(),
+      tourId: 'my-tour.index',
+      status: 'ENDED'
+    });
 
-  let subject = TourObject.create({
-    tourManager: MockTourManagerService.create(),
-    tourId: 'my-tour.index',
-    status: 'INACTIVE',
-    calloutOptions: {}
+    subject.on('tour.close', function() {
+      assert.notOk(true, 'tour.close event is not emitted');
+    });
+
+    subject._onClose();
+    run.later(this, () => done(), 2);
   });
 
-  subject.on('callout.show', function(e) {
-    assert.ok('callout.show event is emitted');
-    assert.ok(arguments.length, 1, 'one argument is passed to the function.');
-    assert.deepEqual(e.toJSON(), {
-      id: 'my-tour.index',
+  test('callout.show event is correctly emitted', function(assert) {
+    assert.expect(3);
+
+    let subject = TourObject.create({
+      tourManager: MockTourManagerService.create(),
+      tourId: 'my-tour.index',
       status: 'INACTIVE',
-      currentStep: 0,
+      calloutOptions: {}
+    });
+
+    subject.on('callout.show', function(e) {
+      assert.ok('callout.show event is emitted');
+      assert.ok(arguments.length, 1, 'one argument is passed to the function.');
+      assert.deepEqual(e.toJSON(), {
+        id: 'my-tour.index',
+        status: 'INACTIVE',
+        currentStep: 0,
+        calloutStatus: 'SHOWN',
+        tourHasBeenEnded: true
+      });
+    });
+
+    subject._onCalloutShow();
+  });
+
+  test('callout.close event is correctly emitted', function(assert) {
+    assert.expect(3);
+    let done = assert.async();
+
+    let subject = TourObject.create({
+      tourManager: MockTourManagerService.create(),
+      tourId: 'my-tour.index',
+      status: 'INACTIVE',
       calloutStatus: 'SHOWN',
-      tourHasBeenEnded: true
+      calloutOptions: {}
     });
+
+    subject.on('callout.close', function(e) {
+      assert.ok('callout.close event is emitted');
+      assert.ok(arguments.length, 1, 'one argument is passed to the function.');
+      assert.deepEqual(e.toJSON(), {
+        id: 'my-tour.index',
+        status: 'INACTIVE',
+        currentStep: 0,
+        calloutStatus: 'CLOSED',
+        tourHasBeenEnded: true
+      });
+
+      done();
+    });
+
+    subject._onCalloutClose();
   });
 
-  subject._onCalloutShow();
-});
+  test('callout.close event is not emitted if callout is not shown', function(assert) {
+    assert.expect(0);
+    let done = assert.async();
 
-test('callout.close event is correctly emitted', function(assert) {
-  assert.expect(3);
-  let done = assert.async();
-
-  let subject = TourObject.create({
-    tourManager: MockTourManagerService.create(),
-    tourId: 'my-tour.index',
-    status: 'INACTIVE',
-    calloutStatus: 'SHOWN',
-    calloutOptions: {}
-  });
-
-  subject.on('callout.close', function(e) {
-    assert.ok('callout.close event is emitted');
-    assert.ok(arguments.length, 1, 'one argument is passed to the function.');
-    assert.deepEqual(e.toJSON(), {
-      id: 'my-tour.index',
+    let subject = TourObject.create({
+      tourManager: MockTourManagerService.create(),
+      tourId: 'my-tour.index',
       status: 'INACTIVE',
-      currentStep: 0,
-      calloutStatus: 'CLOSED',
-      tourHasBeenEnded: true
+      calloutStatus: 'INACTIVE',
+      calloutOptions: {}
     });
 
-    done();
+    subject.on('callout.close', function() {
+      assert.notOk(true, 'callout.close event is not emitted');
+    });
+
+    subject._onCalloutClose();
+    run.later(this, () => done(), 2);
   });
-
-  subject._onCalloutClose();
-});
-
-test('callout.close event is not emitted if callout is not shown', function(assert) {
-  assert.expect(0);
-  let done = assert.async();
-
-  let subject = TourObject.create({
-    tourManager: MockTourManagerService.create(),
-    tourId: 'my-tour.index',
-    status: 'INACTIVE',
-    calloutStatus: 'INACTIVE',
-    calloutOptions: {}
-  });
-
-  subject.on('callout.close', function() {
-    assert.notOk(true, 'callout.close event is not emitted');
-  });
-
-  subject._onCalloutClose();
-  run.later(this, () => done(), 2);
 });

@@ -1,22 +1,20 @@
-/* eslint-disable */
 'use strict';
 
-var Funnel = require('broccoli-funnel');
-var MergeTrees = require('broccoli-merge-trees');
-var path = require('path');
-var merge = require('lodash.merge');
+const Funnel = require('broccoli-funnel');
+const MergeTrees = require('broccoli-merge-trees');
+const path = require('path');
 
 module.exports = {
   name: 'ember-site-tour',
 
   _options: {},
 
-  included: function(app) {
+  included(app) {
     this._super.included(app);
     this._ensureThisImport();
 
     // Setup default options
-    var options = merge({
+    let options = Object.assign({
       importHopscotchJS: true,
       importHopscotchCSS: false
     }, app.options['ember-site-tour'] || {});
@@ -33,15 +31,15 @@ module.exports = {
     }
   },
 
-  treeForVendor: function(vendorTree) {
-    var hopscotchPath = this._getPath();
+  treeForVendor(vendorTree) {
+    let hopscotchPath = this._getPath();
 
-    var trees = [];
+    let trees = [];
     if (vendorTree) {
       trees.push(vendorTree);
     }
 
-    var hopscotchTree = new Funnel(hopscotchPath, {
+    let hopscotchTree = new Funnel(hopscotchPath, {
       include: ['js/hopscotch.js', 'css/hopscotch.css'],
       destDir: 'hopscotch'
     });
@@ -51,17 +49,17 @@ module.exports = {
     return new MergeTrees(trees, { overwrite: true });
   },
 
-  treeForPublic: function(tree) {
+  treeForPublic(tree) {
     this._requireBuildPackages();
 
     if (!this.app) {
       return tree;
     }
 
-    var importHopscotchCSS = this._options.importHopscotchCSS;
+    let importHopscotchCSS = this._options.importHopscotchCSS;
 
     if (importHopscotchCSS) {
-      var hopscotchPath = this._getPath();
+      let hopscotchPath = this._getPath();
 
       return new Funnel(hopscotchPath, {
         srcDir: '/img',
@@ -73,7 +71,7 @@ module.exports = {
   },
 
   _getPath() {
-    var hopscotchPath = path.dirname(require.resolve('hopscotch'));
+    let hopscotchPath = path.dirname(require.resolve('hopscotch'));
 
     // The path returned here is e.g. node_modules/hopscotch/dist/js
     // We want to move one step out to get the dist folder
@@ -83,18 +81,18 @@ module.exports = {
     return hopscotchPath;
   },
 
-  _ensureThisImport: function() {
+  _ensureThisImport() {
     if (!this.import) {
       this._findHost = function findHostShim() {
-        var current = this;
-        var app;
+        let current = this;
+        let app;
         do {
           app = current.app || app;
         } while (current.parent.parent && (current = current.parent));
         return app;
       };
       this.import = function importShim(asset, options) {
-        var app = this._findHost();
+        let app = this._findHost();
         app.import(asset, options);
       };
     }

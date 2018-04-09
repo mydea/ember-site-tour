@@ -1,10 +1,7 @@
 /* eslint-disable no-console */
-import Ember from 'ember';
-import RouteTourMixin from 'ember-site-tour/mixins/route-tour';
+import Route from '@ember/routing/route';
 
-const {
-  Route
-} = Ember;
+import RouteTourMixin from 'ember-site-tour/mixins/route-tour';
 
 export default Route.extend(RouteTourMixin, {
   model() {

@@ -1,13 +1,9 @@
-import Ember from 'ember';
+import { inject as service } from '@ember/service';
+import { set, get } from '@ember/object';
+import Component from '@ember/component';
+import { run } from '@ember/runloop';
 import layout from '../templates/components/tour-start-button';
-
-const {
-  get,
-  set,
-  Component,
-  inject,
-  run
-} = Ember;
+import { typeOf as getTypeOf } from '@ember/utils';
 
 export default Component.extend({
 
@@ -16,7 +12,7 @@ export default Component.extend({
 
   layout,
 
-  tourManager: inject.service('tourManager'),
+  tourManager: service('tourManager'),
 
   // ---------------------------------------------------------------------------------------------------------
   // Attributes
@@ -149,24 +145,34 @@ export default Component.extend({
     }
 
     tour.on('tour.start', (e) => {
-      this.sendAction('tourStarted', e);
+      this._sendAction('tourStarted', e);
     });
 
     tour.on('tour.end', (e) => {
-      this.sendAction('tourEnded', e);
+      this._sendAction('tourEnded', e);
     });
 
     tour.on('tour.close', (e) => {
-      this.sendAction('tourClosed', e);
+      this._sendAction('tourClosed', e);
     });
 
     tour.on('callout.show', (e) => {
-      this.sendAction('calloutShown', e);
+      this._sendAction('calloutShown', e);
     });
 
     tour.on('callout.close', (e) => {
-      this.sendAction('calloutClosed', e);
+      this._sendAction('calloutClosed', e);
     });
+  },
+
+  _sendAction(actionName, ...args) {
+    let action = get(this, actionName);
+    if (action && getTypeOf(action) === 'function') {
+      return action(...args);
+    }
+
+    // For backwards-compatibility, we fall back to non-close actions here
+    this.sendAction(actionName, ...args); // eslint-disable-line ember/closure-actions
   },
 
   /**

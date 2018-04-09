@@ -1,15 +1,11 @@
-import Ember from 'ember';
+import { inject as service } from '@ember/service';
+import Route from '@ember/routing/route';
+import { run } from '@ember/runloop';
 import { ResetControllerMixin } from 'ember-site-tour/mixins/route-tour';
-
-const {
-  Route,
-  inject,
-  run
-} = Ember;
 
 export default Route.extend(ResetControllerMixin, {
 
-  tourManager: inject.service(),
+  tourManager: service(),
 
   activate() {
     run.later(this, () => {

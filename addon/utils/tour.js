@@ -1,19 +1,12 @@
 /* globals hopscotch */
-import Ember from 'ember';
+import Evented from '@ember/object/evented';
+import { A as array } from '@ember/array';
 import $ from 'jquery';
-
-const {
-  get,
-  set,
-  computed,
-  Object: EmberObject,
-  Evented,
-  inject,
-  A: array,
-  run,
-  String: EmberString,
-  typeOf: getTypeOf
-} = Ember;
+import EmberObject, { get, set, computed } from '@ember/object';
+import { inject as service } from '@ember/service';
+import { next } from '@ember/runloop';
+import { typeOf as getTypeOf } from '@ember/utils';
+import { dasherize, classify } from '@ember/string';
 
 /**
  * A tour object.
@@ -26,7 +19,7 @@ const {
  */
 export default EmberObject.extend(Evented, {
 
-  tourManager: inject.service(),
+  tourManager: service(),
 
   /**
    * The ID of the tour.
@@ -260,7 +253,7 @@ export default EmberObject.extend(Evented, {
     let tourManager = get(this, 'tourManager');
     tourManager.setIsRead(get(this, 'tourId'), true);
 
-    run.next(() => {
+    next(() => {
       if (get(this, 'status') !== 'ENDED') {
         set(this, 'status', 'CANCELED');
         this.trigger('tour.close', this._getEventData());
@@ -289,7 +282,7 @@ export default EmberObject.extend(Evented, {
     let tourManager = get(this, 'tourManager');
     tourManager.setIsRead(get(this, 'calloutOptions.id'), true);
 
-    run.next(() => {
+    next(() => {
       if (get(this, 'calloutStatus') === 'SHOWN') {
         set(this, 'calloutStatus', 'CLOSED');
         this.trigger('callout.close', this._getEventData());
@@ -396,7 +389,7 @@ export default EmberObject.extend(Evented, {
    * @private
    */
   _normalizeHopscotchId(id) {
-    return EmberString.dasherize(EmberString.classify(id));
+    return dasherize(classify(id));
   },
 
   /**

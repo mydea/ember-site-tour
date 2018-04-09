@@ -1,36 +1,31 @@
-import Ember from 'ember';
 import RouteTourMixin from 'ember-site-tour/mixins/route-tour';
 import { module, test } from 'qunit';
+import EmberObject, { get } from '@ember/object';
 
-const {
-  get,
-  Object: EmberObject
-} = Ember;
-
-module('Unit | Mixin | route tour');
-
-const MockTourManagerService = EmberObject.extend({
-  setupTour(id, model) {
-    return {
-      id,
-      model
-    };
-  }
-});
-
-test('setting up a tour works', function(assert) {
-  let RouteTourObject = EmberObject.extend(RouteTourMixin);
-  let subject = RouteTourObject.create({
-    routeName: 'test-route.index',
-    tourManager: MockTourManagerService.create()
+module('Unit | Mixin | route tour', function() {
+  const MockTourManagerService = EmberObject.extend({
+    setupTour(id, model) {
+      return {
+        id,
+        model
+      };
+    }
   });
 
-  let controller = EmberObject.create();
-  let model = EmberObject.create();
+  test('setting up a tour works', function(assert) {
+    let RouteTourObject = EmberObject.extend(RouteTourMixin);
+    let subject = RouteTourObject.create({
+      routeName: 'test-route.index',
+      tourManager: MockTourManagerService.create()
+    });
 
-  subject.setupController(controller, model);
-  let tour = get(controller, 'tour');
+    let controller = EmberObject.create();
+    let model = EmberObject.create();
 
-  assert.equal(tour.id, 'test-route.index', 'tour id is correctly set');
-  assert.equal(tour.model, model, 'tour model is correctly set');
+    subject.setupController(controller, model);
+    let tour = get(controller, 'tour');
+
+    assert.equal(tour.id, 'test-route.index', 'tour id is correctly set');
+    assert.equal(tour.model, model, 'tour model is correctly set');
+  });
 });

@@ -381,7 +381,7 @@ export default EmberObject.extend(Evented, {
     return tourSteps.map((step, i) => {
       let stepOfSteps = stepOfStepsStr.replace('%step%', i + 1);
       return $.extend({}, step, {
-        content: `${step.content}<div class='hopscotch-pagination'>${stepOfSteps}</div>`
+        content: `${step.content}<div class='hopscotch-pagination' data-test-site-tour-step="${i + 1}">${stepOfSteps}</div>`
       });
     });
   },

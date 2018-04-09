@@ -1,5 +1,5 @@
 import { inject as service } from '@ember/service';
-import { get } from '@ember/object';
+import { get, set } from '@ember/object';
 import Mixin from '@ember/object/mixin';
 
 /**
@@ -25,9 +25,12 @@ export const SetupControllerMixin = Mixin.create({
   setupController(controller, model) {
     this._super(...arguments);
 
-    let tourName = get(this, 'routeName');
-    let tour = get(this, 'tourManager').setupTour(tourName, model);
-    controller.set('tour', tour);
+    // Avoid multiple declarations of same tour
+    if (!get(controller, 'tour')) {
+      let tourName = get(this, 'routeName');
+      let tour = get(this, 'tourManager').setupTour(tourName, model);
+      set(controller, 'tour', tour);
+    }
   }
 });
 
@@ -59,7 +62,9 @@ export const ResetControllerMixin = Mixin.create({
       let tour = get(controller, 'tour');
       if (tour) {
         tour.close();
+        tour.destroy();
       }
+      set(controller, 'tour', null);
 
     }
 

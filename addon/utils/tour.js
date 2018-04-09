@@ -413,8 +413,26 @@ export default EmberObject.extend(Evented, {
    * @override
    */
   init() {
+    this._super(...arguments);
     let calloutManager = hopscotch.getCalloutManager();
     this.set('_calloutManager', calloutManager);
+  },
+
+  willDestroy() {
+    this._super(...arguments);
+
+    // Also ensure the callout is removed when moving away from the page
+    // Without setting the isRead flag!
+    let calloutManager = get(this, '_calloutManager');
+    let calloutOptions = get(this, 'calloutOptions');
+    if (calloutOptions) {
+      let { id } = calloutOptions;
+      let normalizedId = this._normalizeHopscotchId(id);
+
+      if (calloutManager.getCallout(normalizedId)) {
+        calloutManager.removeCallout(normalizedId);
+      }
+    }
   }
 
 });

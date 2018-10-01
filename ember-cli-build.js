@@ -15,7 +15,7 @@ module.exports = function(defaults) {
     },
     'ember-prism': {
       'theme': 'twilight',
-      'components': ['bash', 'handlebars', 'javascript'],
+      'components': ['bash', 'handlebars', 'javascript', 'scss', 'markup-templating'],
       'plugins': ['line-highlight']
     }
   });

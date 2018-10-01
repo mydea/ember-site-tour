@@ -1,5 +1,10 @@
 # Changelog
 
+v1.1.4
+
+* Improve translateability (you can now simply overwrite the `messages` property on the service)
+* [INTERNAL] Update dependencies
+
 v1.1.3
 
 * Ensure tours are always correctly setup/destroyed

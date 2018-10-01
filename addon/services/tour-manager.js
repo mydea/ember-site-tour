@@ -33,6 +33,26 @@ export default Service.extend({
   }),
 
   /**
+   * Overwrite this for custom translations.
+   *
+   * @property messages
+   * @type {Object}
+   * @readOnly
+   * @protected
+   */
+  messages: computed(function() {
+    return {
+      nextBtn: 'Next',
+      prevBtn: 'Previous',
+      closeTooltip: 'Close',
+      skipBtn: 'Skip',
+      doneBtn: 'Done',
+      defaultCalloutTitle: 'Start a tour!',
+      stepCount: 'Step %step% of %stepCount%'
+    };
+  }),
+
+  /**
    * This can be overwritten if necessary, e.g. for engines.
    *
    * @property owner
@@ -154,11 +174,14 @@ export default Service.extend({
    * @public
    */
   addCallout(tour, {
-    calloutTitle = 'Start a tour!',
+    calloutTitle,
     calloutMessage,
     placement = 'top',
     target
   }) {
+    calloutTitle = calloutTitle || get(this, 'messages.defaultCalloutTitle');
+
+
     let options = {
       id: `${tour.get('tourId')}-callout`,
       target,
@@ -305,10 +328,11 @@ export default Service.extend({
   _configureHopscotch() {
     hopscotch.configure({
       i18n: {
-        nextBtn: this._t('Next'),
-        prevBtn: this._t('Previous'),
-        skipBtn: this._t('Skip'),
-        doneBtn: this._t('Done')
+        nextBtn: this._t(get(this, 'messages.nextBtn')),
+        prevBtn: this._t(get(this, 'messages.prevBtn')),
+        skipBtn: this._t(get(this, 'messages.skipBtn')),
+        doneBtn: this._t(get(this, 'messages.doneBtn')),
+        closeTooltip: this._t(get(this, 'messages.closeTooltip'))
       }
     });
   },

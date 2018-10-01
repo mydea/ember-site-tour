@@ -68,7 +68,10 @@ module('Unit | Object | tour', function() {
 
     let subject = TourObject.create({
       tourManager: MockTourManagerService.create({
-        includeStepCount: true
+        includeStepCount: true,
+        messages: {
+          stepCount: 'Step %step% of %stepCount%!'
+        }
       }),
       tourId: 'my-tour.index',
       steps
@@ -76,13 +79,13 @@ module('Unit | Object | tour', function() {
 
     let stepsTarget = [
       {
-        content: `Test content<div class='hopscotch-pagination' data-test-site-tour-step="1">Step 1 of 3</div>`
+        content: `Test content<div class='hopscotch-pagination' data-test-site-tour-step="1">Step 1 of 3!</div>`
       },
       {
-        content: `Test content<div class='hopscotch-pagination' data-test-site-tour-step="2">Step 2 of 3</div>`
+        content: `Test content<div class='hopscotch-pagination' data-test-site-tour-step="2">Step 2 of 3!</div>`
       },
       {
-        content: `Test content<div class='hopscotch-pagination' data-test-site-tour-step="3">Step 3 of 3</div>`
+        content: `Test content<div class='hopscotch-pagination' data-test-site-tour-step="3">Step 3 of 3!</div>`
       }
     ];
 

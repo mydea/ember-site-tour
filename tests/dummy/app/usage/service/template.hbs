@@ -91,6 +91,17 @@ export default TourManagerService.extend({
     // you can change how tours are loaded
     // this function should return an array of steps
   },
+  messages: computed(function() {
+    return {
+      nextBtn: 'Next',
+      prevBtn: 'Previous',
+      skipBtn: 'Skip',
+      doneBtn: 'Done',
+      defaultCalloutTitle: 'Start a tour!',
+      closeTooltip: 'Close',
+      stepCount: 'Step %step% of %stepCount%'
+    };
+  }),
   _t(str) {
     // this function can be used to implement translation.
     return this.get('i18n').t(str);

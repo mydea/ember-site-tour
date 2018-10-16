@@ -338,6 +338,17 @@ export default Service.extend({
   },
 
   /**
+   * Remove all callouts.
+   *
+   * @method _removeAllCallouts
+   * @private
+   */
+  _removeAllCallouts() {
+    let calloutManager = this.get('_calloutManager');
+    calloutManager.removeAllCallouts();
+  },
+
+  /**
    * Init the tour & callout manager.
    * This is automatically called on service initialisation.
    *
@@ -351,6 +362,12 @@ export default Service.extend({
     this._configureHopscotch();
 
     this._super(...arguments);
+  },
+
+  willDestroy() {
+    this._super(...arguments);
+
+    this._removeAllCallouts();
   }
 
 });

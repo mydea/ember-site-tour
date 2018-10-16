@@ -173,9 +173,6 @@ export default Component.extend({
     if (action && getTypeOf(action) === 'function') {
       return action(...args);
     }
-
-    // For backwards-compatibility, we fall back to non-close actions here
-    this.sendAction(actionName, ...args); // eslint-disable-line ember/closure-actions
   },
 
   /**

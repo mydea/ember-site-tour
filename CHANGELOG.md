@@ -1,5 +1,9 @@
 # Changelog
 
+v2.0.0
+
+* Remove usage of `sendAction` on the `tour-start-button` component - use closure actions instead
+
 v1.1.4
 
 * Improve translateability (you can now simply overwrite the `messages` property on the service)

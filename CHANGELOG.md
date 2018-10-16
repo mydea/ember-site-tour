@@ -4,6 +4,7 @@ v2.0.0
 
 * Remove usage of `sendAction` on the `tour-start-button` component - use closure actions instead
 * Ensure all callouts are removed when the tour-manager service is destroyed
+* Ensure callout is removed when tour-start-button is destroyed
 
 v1.1.4
 

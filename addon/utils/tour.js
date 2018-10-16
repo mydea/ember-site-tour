@@ -216,7 +216,7 @@ export default EmberObject.extend(Evented, {
    * @method hideCallout
    * @public
    */
-  hideCallout() {
+  hideCallout({ markAsRead = true } = {}) {
     let calloutOptions = get(this, 'calloutOptions');
     let calloutManager = this.get('_calloutManager');
     if (calloutOptions) {
@@ -225,7 +225,10 @@ export default EmberObject.extend(Evented, {
 
       if (calloutManager.getCallout(normalizedId)) {
         calloutManager.removeCallout(normalizedId);
-        this._onCalloutClose();
+
+        if (markAsRead) {
+          this._onCalloutClose();
+        }
       }
     }
   },
@@ -423,16 +426,7 @@ export default EmberObject.extend(Evented, {
 
     // Also ensure the callout is removed when moving away from the page
     // Without setting the isRead flag!
-    let calloutManager = get(this, '_calloutManager');
-    let calloutOptions = get(this, 'calloutOptions');
-    if (calloutOptions) {
-      let { id } = calloutOptions;
-      let normalizedId = this._normalizeHopscotchId(id);
-
-      if (calloutManager.getCallout(normalizedId)) {
-        calloutManager.removeCallout(normalizedId);
-      }
-    }
+    this.hideCallout({ markAsRead: false });
   }
 
 });

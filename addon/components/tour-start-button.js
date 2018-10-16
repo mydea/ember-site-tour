@@ -203,6 +203,8 @@ export default Component.extend({
    * @override
    */
   didInsertElement() {
+    this._super(...arguments);
+
     let tourManager = get(this, 'tourManager');
     let tour = get(this, 'tour');
     let callout = get(this, 'callout');
@@ -233,11 +235,17 @@ export default Component.extend({
    * @override
    */
   willDestroyElement() {
+    this._super(...arguments);
+
     this._tearDownEventListeners();
+
     let timer = get(this, '_calloutTimer');
     if (timer) {
       cancel(timer);
     }
+
+    let tour = get(this, 'tour');
+    tour.hideCallout({ markAsRead: false });
   },
 
   /**

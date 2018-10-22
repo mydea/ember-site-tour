@@ -1,5 +1,9 @@
 # Changelog
 
+v2.0.1
+
+* Guard against destroyed tour in `tour-start-button` component
+
 v2.0.0
 
 * Remove usage of `sendAction` on the `tour-start-button` component - use closure actions instead

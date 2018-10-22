@@ -235,8 +235,6 @@ export default Component.extend({
    * @override
    */
   willDestroyElement() {
-    this._super(...arguments);
-
     this._tearDownEventListeners();
 
     let timer = get(this, '_calloutTimer');
@@ -245,7 +243,11 @@ export default Component.extend({
     }
 
     let tour = get(this, 'tour');
-    tour.hideCallout({ markAsRead: false });
+    if (tour) {
+      tour.hideCallout({ markAsRead: false });
+    }
+
+    this._super(...arguments);
   },
 
   /**

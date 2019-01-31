@@ -50,8 +50,6 @@ module.exports = {
   },
 
   treeForPublic(tree) {
-    this._requireBuildPackages();
-
     if (!this.app) {
       return tree;
     }

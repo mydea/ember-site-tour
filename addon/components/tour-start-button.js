@@ -133,7 +133,7 @@ export default Component.extend({
   didInsertElement() {
     this._super(...arguments);
 
-    this._setupCalloutTask.perform();
+    get(this, '_setupCalloutTask').perform();
     this._setupEventListeners();
   },
 
@@ -234,7 +234,6 @@ export default Component.extend({
     tour.off('callout.show', eventListeners['callout.show']);
     tour.off('callout.close', eventListeners['callout.close']);
   },
-
 
   _setupCalloutTask: task(function* () {
     let tourManager = get(this, 'tourManager');

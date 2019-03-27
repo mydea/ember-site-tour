@@ -195,7 +195,7 @@ export default Component.extend({
     }
 
     let eventListeners = {
-      'tour-start': (e) => {
+      'tour.start': (e) => {
         this._sendAction('tourStarted', e);
       },
       'tour.end': (e) => {

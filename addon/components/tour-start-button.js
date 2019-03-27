@@ -1,9 +1,9 @@
 import { inject as service } from '@ember/service';
-import { set, get } from '@ember/object';
+import { get } from '@ember/object';
 import Component from '@ember/component';
-import { later, cancel } from '@ember/runloop';
 import layout from '../templates/components/tour-start-button';
 import { typeOf as getTypeOf } from '@ember/utils';
+import { task, timeout } from 'ember-concurrency';
 
 export default Component.extend({
 
@@ -120,19 +120,6 @@ export default Component.extend({
   calloutClosed: null,
 
   // ---------------------------------------------------------------------------------------------------------
-  // Properties
-
-  /**
-   * The timer to show the callout.
-   * This is used to cancel the timer on willDestroyElement
-   *
-   * @property _calloutTimer
-   * @type {Ember.RSVP.Promise}
-   * @private
-   */
-  _calloutTimer: null,
-
-  // ---------------------------------------------------------------------------------------------------------
   // Methods
 
   /**
@@ -205,6 +192,11 @@ export default Component.extend({
   didInsertElement() {
     this._super(...arguments);
 
+    this._setupCalloutTask.perform();
+    this._setupEventListeners();
+  },
+
+  _setupCalloutTask: task(function* () {
     let tourManager = get(this, 'tourManager');
     let tour = get(this, 'tour');
     let callout = get(this, 'callout');
@@ -213,19 +205,20 @@ export default Component.extend({
     let { element } = this;
     let [target] = element.children;
 
-    if (tour && callout && target) {
-      tourManager.addCallout(tour, {
-        calloutMessage: callout,
-        placement,
-        target
-      });
-
-      let timer = later(this, () => tour.showCallout(), 2000);
-      set(this, '_calloutTimer', timer);
+    if (!tour || !callout || !target) {
+      return;
     }
 
-    this._setupEventListeners();
-  },
+    tourManager.addCallout(tour, {
+      calloutMessage: callout,
+      placement,
+      target
+    });
+
+    yield timeout(2000);
+
+    tour.showCallout();
+  }),
 
   /**
    * When the element is destroyed, tear down the event listeners & timers.
@@ -236,11 +229,6 @@ export default Component.extend({
    */
   willDestroyElement() {
     this._tearDownEventListeners();
-
-    let timer = get(this, '_calloutTimer');
-    if (timer) {
-      cancel(timer);
-    }
 
     let tour = get(this, 'tour');
     if (tour) {

@@ -1,5 +1,5 @@
 import { inject as service } from '@ember/service';
-import { get } from '@ember/object';
+import { get, set } from '@ember/object';
 import Component from '@ember/component';
 import layout from '../templates/components/tour-start-button';
 import { typeOf as getTypeOf } from '@ember/utils';
@@ -123,65 +123,6 @@ export default Component.extend({
   // Methods
 
   /**
-   * Setup the tour event listeners.
-   *
-   * @method _setupEventListeners
-   * @private
-   */
-  _setupEventListeners() {
-    let tour = get(this, 'tour');
-    if (!tour) {
-      return;
-    }
-
-    tour.on('tour.start', (e) => {
-      this._sendAction('tourStarted', e);
-    });
-
-    tour.on('tour.end', (e) => {
-      this._sendAction('tourEnded', e);
-    });
-
-    tour.on('tour.close', (e) => {
-      this._sendAction('tourClosed', e);
-    });
-
-    tour.on('callout.show', (e) => {
-      this._sendAction('calloutShown', e);
-    });
-
-    tour.on('callout.close', (e) => {
-      this._sendAction('calloutClosed', e);
-    });
-  },
-
-  _sendAction(actionName, ...args) {
-    let action = get(this, actionName);
-    if (action && getTypeOf(action) === 'function') {
-      return action(...args);
-    }
-  },
-
-  /**
-   * Tear down the tour's event listeners.
-   *
-   * @method _tearDownEventListeners
-   * @private
-   */
-  _tearDownEventListeners() {
-    let tour = get(this, 'tour');
-    if (!tour) {
-      return;
-    }
-    tour.off('tour.start');
-    tour.off('tour.end');
-    tour.off('tour.close');
-
-    tour.off('callout.show');
-    tour.off('callout.close');
-  },
-
-  /**
    * Setup the tour & event listeners.
    * Also show the callout if it is available.
    *
@@ -195,30 +136,6 @@ export default Component.extend({
     this._setupCalloutTask.perform();
     this._setupEventListeners();
   },
-
-  _setupCalloutTask: task(function* () {
-    let tourManager = get(this, 'tourManager');
-    let tour = get(this, 'tour');
-    let callout = get(this, 'callout');
-    let placement = get(this, 'calloutPlacement') || 'top';
-
-    let { element } = this;
-    let [target] = element.children;
-
-    if (!tour || !callout || !target) {
-      return;
-    }
-
-    tourManager.addCallout(tour, {
-      calloutMessage: callout,
-      placement,
-      target
-    });
-
-    yield timeout(2000);
-
-    tour.showCallout();
-  }),
 
   /**
    * When the element is destroyed, tear down the event listeners & timers.
@@ -247,5 +164,99 @@ export default Component.extend({
   click() {
     let tour = get(this, 'tour');
     tour.start();
-  }
+  },
+
+  _sendAction(actionName, ...args) {
+    let action = get(this, actionName);
+    if (action && getTypeOf(action) === 'function') {
+      return action(...args);
+    }
+  },
+
+  _eventListeners: null,
+
+  /**
+   * Setup the tour event listeners.
+   *
+   * @method _setupEventListeners
+   * @private
+   */
+  _setupEventListeners() {
+    let tour = get(this, 'tour');
+    if (!tour) {
+      return;
+    }
+
+    let eventListeners = {
+      'tour-start': (e) => {
+        this._sendAction('tourStarted', e);
+      },
+      'tour.end': (e) => {
+        this._sendAction('tourEnded', e);
+      },
+      'tour.close': (e) => {
+        this._sendAction('tourClosed', e);
+      },
+      'callout.show': (e) => {
+        this._sendAction('calloutShown', e);
+      },
+      'callout.close': (e) => {
+        this._sendAction('calloutClosed', e);
+      }
+    };
+
+    tour.on('tour.start', eventListeners['tour.start']);
+    tour.on('tour.end', eventListeners['tour.end']);
+    tour.on('tour.close', eventListeners['tour.close']);
+    tour.on('callout.show', eventListeners['callout.show']);
+    tour.on('callout.close', eventListeners['callout.close']);
+
+    set(this, '_eventListeners', eventListeners);
+  },
+
+  /**
+   * Tear down the tour's event listeners.
+   *
+   * @method _tearDownEventListeners
+   * @private
+   */
+  _tearDownEventListeners() {
+    let tour = get(this, 'tour');
+    let eventListeners = get(this, '_eventListeners');
+
+    if (!tour) {
+      return;
+    }
+
+    tour.off('tour.start', eventListeners['tour.start']);
+    tour.off('tour.end', eventListeners['tour.end']);
+    tour.off('tour.close', eventListeners['tour.close']);
+    tour.off('callout.show', eventListeners['callout.show']);
+    tour.off('callout.close', eventListeners['callout.close']);
+  },
+
+
+  _setupCalloutTask: task(function* () {
+    let tourManager = get(this, 'tourManager');
+    let tour = get(this, 'tour');
+    let callout = get(this, 'callout');
+    let placement = get(this, 'calloutPlacement') || 'top';
+
+    let { element } = this;
+    let [target] = element.children;
+
+    if (!tour || !callout || !target) {
+      return;
+    }
+
+    tourManager.addCallout(tour, {
+      calloutMessage: callout,
+      placement,
+      target
+    });
+
+    yield timeout(2000);
+
+    tour.showCallout();
+  })
 });

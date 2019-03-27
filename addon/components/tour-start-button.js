@@ -1,9 +1,10 @@
 import { inject as service } from '@ember/service';
-import { get, set } from '@ember/object';
+import { get, set, computed } from '@ember/object';
 import Component from '@ember/component';
 import layout from '../templates/components/tour-start-button';
 import { typeOf as getTypeOf } from '@ember/utils';
 import { task, timeout } from 'ember-concurrency';
+import Ember from 'ember';
 
 export default Component.extend({
 
@@ -118,6 +119,12 @@ export default Component.extend({
    * @public
    */
   calloutClosed: null,
+
+  // Properties
+
+  calloutTimeoutTime: computed(function() {
+    return Ember.testing ? 1 : 2000;
+  }),
 
   // ---------------------------------------------------------------------------------------------------------
   // Methods
@@ -238,6 +245,7 @@ export default Component.extend({
   _setupCalloutTask: task(function* () {
     let tourManager = get(this, 'tourManager');
     let tour = get(this, 'tour');
+    let calloutTimeoutTime = get(this, 'calloutTimeoutTime');
     let callout = get(this, 'callout');
     let placement = get(this, 'calloutPlacement') || 'top';
 
@@ -254,7 +262,8 @@ export default Component.extend({
       target
     });
 
-    yield timeout(2000);
+
+    yield timeout(calloutTimeoutTime);
 
     tour.showCallout();
   })

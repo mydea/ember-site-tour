@@ -1,5 +1,12 @@
 # Changelog
 
+v2.1.0
+
+* Use ember-concurrency to handle async tasks
+* Reduce wait time for callouts in tests
+* Fix deprecation message for removing event listeners
+* [INTERNAL] Update dependencies to Ember 3.8
+
 v2.0.1
 
 * Guard against destroyed tour in `tour-start-button` component

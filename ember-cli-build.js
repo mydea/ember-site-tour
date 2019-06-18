@@ -3,12 +3,6 @@ var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
 module.exports = function(defaults) {
   var app = new EmberAddon(defaults, {
-    'ember-bootstrap': {
-      'importBootstrapTheme': true,
-      'bootstrapVersion': 3,
-      'importBootstrapFont': true,
-      'importBootstrapCSS': true
-    },
     'ember-site-tour': {
       importHopscotchJS: true,
       importHopscotchCSS: true
@@ -19,6 +13,9 @@ module.exports = function(defaults) {
       'plugins': ['line-highlight']
     }
   });
+
+  // Import bootstrap CSS
+  app.import('node_modules/bootstrap/dist/css/bootstrap.css');
 
   return app.toTree();
 };

@@ -25,29 +25,16 @@
             Defining Tours
           {{/link-to}}
         </li>
-        {{#bs-dropdown tagName="li"  as |dd|}}
-          {{#dd.toggle}}
-            Usage <span class="caret"></span>
-          {{/dd.toggle}}
-          {{#dd.menu}}
-            <li>{{#link-to "usage.index"}}Overview{{/link-to}}</li>
-            <li>{{#link-to "usage.mixin"}}RouteTour Mixin{{/link-to}}</li>
-            <li>{{#link-to "usage.tour-start-button"}}tour-start-button Component{{/link-to}}</li>
-            <li>{{#link-to "usage.tour-object"}}Tour Object{{/link-to}}</li>
-            <li>{{#link-to "usage.service"}}TourManager Service{{/link-to}}</li>
-          {{/dd.menu}}
-        {{/bs-dropdown}}
-        {{#bs-dropdown tagName="li" as |dd|}}
-          {{#dd.toggle}}
-            Examples <span class="caret"></span>
-          {{/dd.toggle}}
-          {{#dd.menu}}
-            <li>{{#link-to "examples.simple"}}Basic Example{{/link-to}}</li>
-            <li>{{#link-to "examples.engines"}}Usage in Engines{{/link-to}}</li>
-            <li>{{#link-to "examples.tracking"}}Tracking Tour Performance{{/link-to}}</li>
-            <li>{{#link-to "examples.tests"}}Test Helpers{{/link-to}}</li>
-          {{/dd.menu}}
-        {{/bs-dropdown}}
+        <li>
+          {{#link-to 'usage'}}
+            Usage
+          {{/link-to}}
+        </li>
+        <li>
+          {{#link-to 'examples'}}
+            Examples
+          {{/link-to}}
+        </li>
       </ul>
       <ul class="navbar-nav nav navbar-right">
         <li>

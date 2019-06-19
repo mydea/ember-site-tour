@@ -10,7 +10,7 @@ module.exports = {
   _options: {},
 
   included(app) {
-    this._super.included(app);
+    this._super.included.apply(this, arguments);
     this._ensureThisImport();
 
     // Setup default options

@@ -1,5 +1,10 @@
 # Changelog
 
+v2.2.0
+
+* Update ember-concurrency to `v1.0.0`
+* Fix `include()` command in `index.js` to not break with ember-compatibility-helpers
+
 v2.1.0
 
 * Use ember-concurrency to handle async tasks

@@ -39,7 +39,7 @@
     "ember-maybe-import-regenerator": "^0.1.6",
     "ember-page-title": "~5.0.1",
     "ember-prism": "~0.4.0",
-    "ember-qunit": "~4.4.1",
+    "ember-qunit": "~4.6.0",
     "ember-resolver": "^5.0.1",
     "ember-source": "~3.14.0",
     "ember-source-channel-url": "^2.0.1",

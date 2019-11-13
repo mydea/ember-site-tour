@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-new-mixins */
 import RouteTourMixin from 'ember-site-tour/mixins/route-tour';
 import { module, test } from 'qunit';
 import EmberObject, { get } from '@ember/object';

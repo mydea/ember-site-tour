@@ -3520,6 +3520,15 @@ ember-export-application-global@~2.0.0:
   dependencies:
     ember-cli-babel "^6.0.0-beta.7"
 
+ember-in-element-polyfill@^0.2.0:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/ember-in-element-polyfill/-/ember-in-element-polyfill-0.2.1.tgz#df865f782ed31adee95c99ebf3deb4227dd0f6dc"
+  integrity sha512-S1RPqYxo8lTP//8r/Z8uIfhjFY1uVFKrDA0iVUxdc90kUIVobG51dfvj4ib/oDDfJ5IgzItfJqSJLUTaufadPg==
+  dependencies:
+    debug "^3.1.0"
+    ember-cli-babel "^7.1.2"
+    ember-cli-version-checker "^2.1.0"
+
 ember-load-initializers@~2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ember-load-initializers/-/ember-load-initializers-2.1.1.tgz#d1a8bead00bc44222b0ab181840869992beb30f5"
@@ -3548,14 +3557,15 @@ ember-page-title@~5.0.1:
     ember-cli-htmlbars "^3.0.1"
     ember-copy "^1.0.0"
 
-ember-prism@~0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/ember-prism/-/ember-prism-0.4.0.tgz#b1f02bed563345ead985ace900b7311a730a7149"
-  integrity sha512-5WfDBMs2sBAHalFnF+eZ247wBE+uYw4YW3jkRAGmAf/n7nt1yP3lPOwAEKeflxJWae5kunh77Wjk0ANhXwylxw==
+ember-prism@~0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/ember-prism/-/ember-prism-0.5.0.tgz#d8d53f345aaa6890d8541456ba05121e5626d5d1"
+  integrity sha512-IvjrS5SA08lDAvjvivV2DiQQgDu/P2f69z2HYH2vzduQw4m7BYF/+xK57zcMQWresIckH/tgKKdnJLZHLAE0Xg==
   dependencies:
     ember-cli-babel "^7.1.2"
     ember-cli-htmlbars "^3.0.0"
     ember-cli-node-assets "^0.2.2"
+    ember-in-element-polyfill "^0.2.0"
     prismjs "^1.15.0"
 
 ember-qunit@~4.6.0:

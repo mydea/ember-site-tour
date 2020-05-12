@@ -8,6 +8,13 @@ An ember add-on to implement site tours based on
 
 Documentation: [http://mydea.github.io/ember-site-tour/](http://mydea.github.io/ember-site-tour/)
 
+Compatibility
+------------------------------------------------------------------------------
+
+* Ember.js v3.12 or above
+* Ember CLI v2.13 or above
+* Node.js v10 or above
+
 ## Installation
 
 `ember install ember-site-tour`

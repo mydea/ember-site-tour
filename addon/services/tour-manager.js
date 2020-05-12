@@ -1,11 +1,11 @@
 /* globals hopscotch */
-import { computed, get } from '@ember/object';
-import Service from '@ember/service';
-import { A as array } from '@ember/array';
-import { getOwner } from '@ember/application';
-import { typeOf as getTypeOf } from '@ember/utils';
-import Tour from './../utils/tour';
-import { assign } from '@ember/polyfills';
+import { computed } from "@ember/object";
+import Service from "@ember/service";
+import { A as array } from "@ember/array";
+import { getOwner } from "@ember/application";
+import { typeOf as getTypeOf } from "@ember/utils";
+import Tour from "./../utils/tour";
+import { assign } from "@ember/polyfills";
 
 /**
  * A service to handle guided tours through the interface.
@@ -16,7 +16,6 @@ import { assign } from '@ember/polyfills';
  * @public
  */
 export default Service.extend({
-
   // ---------------------------------------------------------------------------------------------------------
   // Properties
 
@@ -28,7 +27,7 @@ export default Service.extend({
    * @type {Object}
    * @public
    */
-  hopscotch: computed(function() {
+  hopscotch: computed(function () {
     return hopscotch;
   }),
 
@@ -40,15 +39,15 @@ export default Service.extend({
    * @readOnly
    * @protected
    */
-  messages: computed(function() {
+  messages: computed(function () {
     return {
-      nextBtn: 'Next',
-      prevBtn: 'Previous',
-      closeTooltip: 'Close',
-      skipBtn: 'Skip',
-      doneBtn: 'Done',
-      defaultCalloutTitle: 'Start a tour!',
-      stepCount: 'Step %step% of %stepCount%'
+      nextBtn: "Next",
+      prevBtn: "Previous",
+      closeTooltip: "Close",
+      skipBtn: "Skip",
+      doneBtn: "Done",
+      defaultCalloutTitle: "Start a tour!",
+      stepCount: "Step %step% of %stepCount%",
     };
   }),
 
@@ -59,7 +58,7 @@ export default Service.extend({
    * @type {Object}
    * @protected
    */
-  owner: computed(function() {
+  owner: computed(function () {
     return getOwner(this);
   }),
 
@@ -80,7 +79,7 @@ export default Service.extend({
    * @type {String}
    * @private
    */
-  _localStorageKey: 'ember-site-tour',
+  _localStorageKey: "ember-site-tour",
 
   /**
    * If this is set to false,
@@ -106,13 +105,16 @@ export default Service.extend({
    * @public
    */
   showCallout(id, callout = {}, onlyUnread = true) {
-    let calloutManager = this.get('_calloutManager');
+    let calloutManager = this._calloutManager;
 
-    if (!onlyUnread || !this.getIsRead(id) && callout.target) {
-      let options = assign({
-        id,
-        onClose: () => this.setIsRead(id)
-      }, callout);
+    if (!onlyUnread || (!this.getIsRead(id) && callout.target)) {
+      let options = assign(
+        {
+          id,
+          onClose: () => this.setIsRead(id),
+        },
+        callout
+      );
 
       if (calloutManager.getCallout(id)) {
         calloutManager.removeCallout(id);
@@ -130,7 +132,7 @@ export default Service.extend({
    * @public
    */
   closeCallout(id, setIsRead = true) {
-    let calloutManager = this.get('_calloutManager');
+    let calloutManager = this._calloutManager;
 
     if (!id) {
       calloutManager.removeAllCallouts();
@@ -153,14 +155,13 @@ export default Service.extend({
    */
   setupTour(tourId, model) {
     let steps = this._setupTourSteps(tourId, model);
-    let owner = get(this, 'owner');
+    let owner = this.owner;
 
-    let tour = Tour.create(
-      owner.ownerInjection(), {
-        tourId,
-        steps,
-        model
-      });
+    let tour = Tour.create(owner.ownerInjection(), {
+      tourId,
+      steps,
+      model,
+    });
 
     return tour;
   },
@@ -173,24 +174,21 @@ export default Service.extend({
    * @return {EmberHopscotch.Object.Tour}
    * @public
    */
-  addCallout(tour, {
-    calloutTitle,
-    calloutMessage,
-    placement = 'top',
-    target
-  }) {
-    calloutTitle = calloutTitle || get(this, 'messages.defaultCalloutTitle');
-
+  addCallout(
+    tour,
+    { calloutTitle, calloutMessage, placement = "top", target }
+  ) {
+    calloutTitle = calloutTitle || this.messages.defaultCalloutTitle;
 
     let options = {
-      id: `${tour.get('tourId')}-callout`,
+      id: `${tour.get("tourId")}-callout`,
       target,
       placement,
       title: this._t(calloutTitle),
-      content: this._t(calloutMessage)
+      content: this._t(calloutMessage),
     };
 
-    tour.set('calloutOptions', options);
+    tour.set("calloutOptions", options);
     return tour;
   },
 
@@ -207,12 +205,12 @@ export default Service.extend({
       return false;
     }
 
-    let lsKey = get(this, '_localStorageKey');
+    let lsKey = this._localStorageKey;
     let lsData = null;
     try {
       lsData = window.localStorage.getItem(lsKey);
-    } catch(e) {
-      console.error('Could not read from local storage.', e); //eslint-disable-line
+    } catch (e) {
+      console.error("Could not read from local storage.", e); //eslint-disable-line
     }
     if (!lsData) {
       return false;
@@ -235,7 +233,7 @@ export default Service.extend({
       return;
     }
 
-    let lsKey = get(this, '_localStorageKey');
+    let lsKey = this._localStorageKey;
     let lsData = window.localStorage.getItem(lsKey);
     if (lsData) {
       lsData = JSON.parse(lsData);
@@ -246,10 +244,9 @@ export default Service.extend({
 
     try {
       window.localStorage.setItem(lsKey, JSON.stringify(lsData));
-    } catch(e) {
-      console.error('Could not save to local storage.', e); //eslint-disable-line
+    } catch (e) {
+      console.error("Could not save to local storage.", e); //eslint-disable-line
     }
-
   },
 
   /**
@@ -276,32 +273,32 @@ export default Service.extend({
    * @private
    */
   _loadTour(tourId) {
-    let owner = get(this, 'owner');
+    let owner = this.owner;
     let tourData = owner.factoryFor(`tour:${tourId}`) || [];
 
     let tourArray = [];
     let tourInstance;
     switch (getTypeOf(tourData.class)) {
-      case 'array':
+      case "array":
         tourArray = tourData.class;
         break;
-      case 'function':
+      case "function":
         tourArray = tourData.class(tourId);
         break;
-      case 'class':
+      case "class":
         tourInstance = tourData.create({ tourId });
-        tourArray = get(tourInstance, 'tour') || [];
+        tourArray = tourInstance.tour || [];
     }
 
     tourData = array(tourArray);
 
     return tourData.map((step) => {
       return {
-        condition: get(step, 'condition'),
-        target: get(step, 'target'),
-        placement: get(step, 'placement') || 'top',
-        title: this._t(get(step, 'title')),
-        content: this._t(get(step, 'content'))
+        condition: step.condition,
+        target: step.target,
+        placement: step.placement || "top",
+        title: this._t(step.title),
+        content: this._t(step.content),
       };
     });
   },
@@ -328,12 +325,12 @@ export default Service.extend({
   _configureHopscotch() {
     hopscotch.configure({
       i18n: {
-        nextBtn: this._t(get(this, 'messages.nextBtn')),
-        prevBtn: this._t(get(this, 'messages.prevBtn')),
-        skipBtn: this._t(get(this, 'messages.skipBtn')),
-        doneBtn: this._t(get(this, 'messages.doneBtn')),
-        closeTooltip: this._t(get(this, 'messages.closeTooltip'))
-      }
+        nextBtn: this._t(this.messages.nextBtn),
+        prevBtn: this._t(this.messages.prevBtn),
+        skipBtn: this._t(this.messages.skipBtn),
+        doneBtn: this._t(this.messages.doneBtn),
+        closeTooltip: this._t(this.messages.closeTooltip),
+      },
     });
   },
 
@@ -344,7 +341,7 @@ export default Service.extend({
    * @private
    */
   _removeAllCallouts() {
-    let calloutManager = this.get('_calloutManager');
+    let calloutManager = this._calloutManager;
     calloutManager.removeAllCallouts();
   },
 
@@ -358,7 +355,7 @@ export default Service.extend({
    */
   init() {
     let calloutManager = hopscotch.getCalloutManager();
-    this.set('_calloutManager', calloutManager);
+    this.set("_calloutManager", calloutManager);
     this._configureHopscotch();
 
     this._super(...arguments);
@@ -368,6 +365,5 @@ export default Service.extend({
     this._super(...arguments);
 
     this._removeAllCallouts();
-  }
-
+  },
 });

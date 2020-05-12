@@ -28,8 +28,8 @@ export const SetupControllerMixin = Mixin.create({
 
     // Avoid multiple declarations of same tour
     if (!get(controller, 'tour')) {
-      let tourName = get(this, 'routeName');
-      let tour = get(this, 'tourManager').setupTour(tourName, model);
+      let tourName = this.routeName;
+      let tour = this.tourManager.setupTour(tourName, model);
       set(controller, 'tour', tour);
     }
   }
@@ -58,7 +58,7 @@ export const ResetControllerMixin = Mixin.create({
    */
   resetController(controller, isExiting) {
     if (isExiting) {
-      let tourManager = get(this, 'tourManager');
+      let tourManager = this.tourManager;
       tourManager.closeCallout();
       let tour = get(controller, 'tour');
       if (tour) {

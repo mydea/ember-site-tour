@@ -140,7 +140,7 @@ export default Component.extend({
   didInsertElement() {
     this._super(...arguments);
 
-    get(this, '_setupCalloutTask').perform();
+    this._setupCalloutTask.perform();
     this._setupEventListeners();
   },
 
@@ -154,7 +154,7 @@ export default Component.extend({
   willDestroyElement() {
     this._tearDownEventListeners();
 
-    let tour = get(this, 'tour');
+    let tour = this.tour;
     if (tour) {
       tour.hideCallout({ markAsRead: false });
     }
@@ -169,7 +169,7 @@ export default Component.extend({
    * @protected
    */
   click() {
-    let tour = get(this, 'tour');
+    let tour = this.tour;
     tour.start();
   },
 
@@ -189,7 +189,7 @@ export default Component.extend({
    * @private
    */
   _setupEventListeners() {
-    let tour = get(this, 'tour');
+    let tour = this.tour;
     if (!tour) {
       return;
     }
@@ -228,8 +228,8 @@ export default Component.extend({
    * @private
    */
   _tearDownEventListeners() {
-    let tour = get(this, 'tour');
-    let eventListeners = get(this, '_eventListeners');
+    let tour = this.tour;
+    let eventListeners = this._eventListeners;
 
     if (!tour) {
       return;
@@ -243,11 +243,11 @@ export default Component.extend({
   },
 
   _setupCalloutTask: task(function* () {
-    let tourManager = get(this, 'tourManager');
-    let tour = get(this, 'tour');
-    let calloutTimeoutTime = get(this, 'calloutTimeoutTime');
-    let callout = get(this, 'callout');
-    let placement = get(this, 'calloutPlacement') || 'top';
+    let tourManager = this.tourManager;
+    let tour = this.tour;
+    let calloutTimeoutTime = this.calloutTimeoutTime;
+    let callout = this.callout;
+    let placement = this.calloutPlacement || 'top';
 
     let { element } = this;
     let [target] = element.children;

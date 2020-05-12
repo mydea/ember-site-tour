@@ -14,7 +14,7 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Run tests
-        run: yarn test
+        run: yarn test:ember
       - name: Lint
         run: |
           yarn lint:js
@@ -28,12 +28,13 @@ jobs:
         # Keep this in sync with config/ember-try.js
         ember:
           [
-            ember-lts-2.18,
-            ember-lts-3.4,
+            ember-lts-3.12,
+            ember-lts-3.16,
             ember-release,
             ember-beta,
             ember-canary,
             ember-default-with-jquery,
+            ember-classic,
           ]
 
     steps:

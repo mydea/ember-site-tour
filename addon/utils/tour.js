@@ -1,13 +1,13 @@
 /* globals hopscotch */
-import Evented from '@ember/object/evented';
-import { A as array } from '@ember/array';
-import EmberObject, { get, set, computed } from '@ember/object';
-import { inject as service } from '@ember/service';
-import { next } from '@ember/runloop';
-import { typeOf as getTypeOf } from '@ember/utils';
-import { dasherize, classify } from '@ember/string';
-import { assign } from '@ember/polyfills';
-import { Promise } from 'rsvp';
+import Evented from "@ember/object/evented";
+import { A as array } from "@ember/array";
+import EmberObject, { set, computed } from "@ember/object";
+import { inject as service } from "@ember/service";
+import { next } from "@ember/runloop";
+import { typeOf as getTypeOf } from "@ember/utils";
+import { dasherize, classify } from "@ember/string";
+import { assign } from "@ember/polyfills";
+import { Promise } from "rsvp";
 
 /**
  * A tour object.
@@ -19,7 +19,6 @@ import { Promise } from 'rsvp';
  * @public
  */
 export default EmberObject.extend(Evented, {
-
   tourManager: service(),
 
   /**
@@ -71,7 +70,7 @@ export default EmberObject.extend(Evented, {
    * @readOnly
    * @public
    */
-  status: 'INACTIVE',
+  status: "INACTIVE",
 
   /**
    * The status of the callout.
@@ -81,7 +80,7 @@ export default EmberObject.extend(Evented, {
    * @readOnly
    * @public
    */
-  calloutStatus: 'INACTIVE',
+  calloutStatus: "INACTIVE",
 
   /**
    * The current step of the tour.
@@ -101,9 +100,9 @@ export default EmberObject.extend(Evented, {
    * @readOnly
    * @public
    */
-  hasBeenRead: computed(function() {
-    let tourManager = get(this, 'tourManager');
-    let id = get(this, 'tourId');
+  hasBeenRead: computed("tourId", function () {
+    let tourManager = this.tourManager;
+    let id = this.tourId;
     return !!tourManager.getIsRead(id);
   }),
 
@@ -125,8 +124,8 @@ export default EmberObject.extend(Evented, {
    */
   start() {
     this._checkSteps();
-    let id = get(this, 'tourId');
-    let steps = get(this, '_steps');
+    let id = this.tourId;
+    let steps = this._steps;
     let normalizedId = this._normalizeHopscotchId(id);
 
     let tour = {
@@ -135,28 +134,28 @@ export default EmberObject.extend(Evented, {
       onClose: () => this._onClose(),
       onEnd: () => this._onEnd(),
       onNext: () => this._gotoNextStep(),
-      onPrev: () => this._gotoPrevStep()
+      onPrev: () => this._gotoPrevStep(),
     };
 
-    if (get(this, 'calloutStatus') === 'SHOWN') {
-      set(this, 'calloutStatus', 'AUTOCLOSED');
+    if (this.calloutStatus === "SHOWN") {
+      set(this, "calloutStatus", "AUTOCLOSED");
       this.hideCallout();
     }
     hopscotch.startTour(tour);
     let currentStep = hopscotch.getCurrStepNum();
-    set(this, 'currentStep', currentStep);
+    set(this, "currentStep", currentStep);
     this._onStart();
 
     return new Promise((resolve) => next(this, resolve));
   },
 
   _gotoNextStep() {
-    set(this, 'currentStep', hopscotch.getCurrStepNum());
+    set(this, "currentStep", hopscotch.getCurrStepNum());
     return new Promise((resolve) => next(resolve));
   },
 
   _gotoPrevStep() {
-    set(this, 'currentStep', hopscotch.getCurrStepNum());
+    set(this, "currentStep", hopscotch.getCurrStepNum());
     return new Promise((resolve) => next(resolve));
   },
 
@@ -167,7 +166,7 @@ export default EmberObject.extend(Evented, {
    * @public
    */
   close() {
-    let id = get(this, 'tourId');
+    let id = this.tourId;
     let normalizedId = this._normalizeHopscotchId(id);
 
     hopscotch.endTour(normalizedId);
@@ -182,16 +181,19 @@ export default EmberObject.extend(Evented, {
    * @public
    */
   showCallout(showAgain = false) {
-    let calloutOptions = get(this, 'calloutOptions');
+    let calloutOptions = this.calloutOptions;
     if (!calloutOptions) {
       return;
     }
     let { id } = calloutOptions;
-    let calloutManager = this.get('_calloutManager');
-    let tourManager = get(this, 'tourManager');
+    let calloutManager = this._calloutManager;
+    let tourManager = this.tourManager;
     let normalizedId = this._normalizeHopscotchId(id);
 
-    if (!showAgain && tourManager.getIsRead(id) || this.get('status') === 'RUNNING') {
+    if (
+      (!showAgain && tourManager.getIsRead(id)) ||
+      this.status === "RUNNING"
+    ) {
       return false;
     }
 
@@ -202,7 +204,7 @@ export default EmberObject.extend(Evented, {
 
       calloutOptions = assign({}, calloutOptions, {
         id: normalizedId,
-        onClose: () => this._onCalloutClose()
+        onClose: () => this._onCalloutClose(),
       });
 
       this._onCalloutShow();
@@ -217,8 +219,8 @@ export default EmberObject.extend(Evented, {
    * @public
    */
   hideCallout({ markAsRead = true } = {}) {
-    let calloutOptions = get(this, 'calloutOptions');
-    let calloutManager = this.get('_calloutManager');
+    let calloutOptions = this.calloutOptions;
+    let calloutManager = this._calloutManager;
     if (calloutOptions) {
       let { id } = calloutOptions;
       let normalizedId = this._normalizeHopscotchId(id);
@@ -240,8 +242,8 @@ export default EmberObject.extend(Evented, {
    * @private
    */
   _onStart() {
-    set(this, 'status', 'RUNNING');
-    this.trigger('tour.start', this._getEventData());
+    set(this, "status", "RUNNING");
+    this.trigger("tour.start", this._getEventData());
   },
 
   /**
@@ -251,12 +253,12 @@ export default EmberObject.extend(Evented, {
    * @private
    */
   _onEnd() {
-    let tourManager = get(this, 'tourManager');
-    tourManager.setIsRead(get(this, 'tourId'), true);
-    this.notifyPropertyChange('hasBeenRead');
+    let tourManager = this.tourManager;
+    tourManager.setIsRead(this.tourId, true);
+    this.notifyPropertyChange("hasBeenRead");
 
-    set(this, 'status', 'ENDED');
-    this.trigger('tour.end', this._getEventData());
+    set(this, "status", "ENDED");
+    this.trigger("tour.end", this._getEventData());
   },
 
   /**
@@ -266,13 +268,13 @@ export default EmberObject.extend(Evented, {
    * @private
    */
   _onClose() {
-    let tourManager = get(this, 'tourManager');
-    tourManager.setIsRead(get(this, 'tourId'), true);
+    let tourManager = this.tourManager;
+    tourManager.setIsRead(this.tourId, true);
 
     next(() => {
-      if (get(this, 'status') !== 'ENDED') {
-        set(this, 'status', 'CANCELED');
-        this.trigger('tour.close', this._getEventData());
+      if (this.status !== "ENDED") {
+        set(this, "status", "CANCELED");
+        this.trigger("tour.close", this._getEventData());
       }
     });
   },
@@ -284,8 +286,8 @@ export default EmberObject.extend(Evented, {
    * @private
    */
   _onCalloutShow() {
-    set(this, 'calloutStatus', 'SHOWN');
-    this.trigger('callout.show', this._getEventData());
+    set(this, "calloutStatus", "SHOWN");
+    this.trigger("callout.show", this._getEventData());
   },
 
   /**
@@ -295,13 +297,13 @@ export default EmberObject.extend(Evented, {
    * @private
    */
   _onCalloutClose() {
-    let tourManager = get(this, 'tourManager');
-    tourManager.setIsRead(get(this, 'calloutOptions.id'), true);
+    let tourManager = this.tourManager;
+    tourManager.setIsRead(this.calloutOptions.id, true);
 
     next(() => {
-      if (get(this, 'calloutStatus') === 'SHOWN') {
-        set(this, 'calloutStatus', 'CLOSED');
-        this.trigger('callout.close', this._getEventData());
+      if (this.calloutStatus === "SHOWN") {
+        set(this, "calloutStatus", "CLOSED");
+        this.trigger("callout.close", this._getEventData());
       }
     });
   },
@@ -315,24 +317,24 @@ export default EmberObject.extend(Evented, {
    * @private
    */
   _getEventData() {
-    let id = get(this, 'tourId');
+    let id = this.tourId;
 
     return {
       tour: this,
       id,
-      status: get(this, 'status'),
-      currentStep: get(this, 'currentStep'),
-      calloutStatus: get(this, 'calloutOptions') ? get(this, 'calloutStatus') : undefined,
-      tourHasBeenEnded: get(this, 'hasBeenRead'),
+      status: this.status,
+      currentStep: this.currentStep,
+      calloutStatus: this.calloutOptions ? this.calloutStatus : undefined,
+      tourHasBeenEnded: this.hasBeenRead,
       toJSON() {
         return {
           id: this.id,
           status: this.status,
           currentStep: this.currentStep,
           calloutStatus: this.calloutStatus,
-          tourHasBeenEnded: this.tourHasBeenEnded
+          tourHasBeenEnded: this.tourHasBeenEnded,
         };
-      }
+      },
     };
   },
 
@@ -345,29 +347,33 @@ export default EmberObject.extend(Evented, {
    * @private
    */
   _checkSteps() {
-    let steps = get(this, 'steps');
-    let model = get(this, 'model');
+    let steps = this.steps;
+    let model = this.model;
 
     let tour = array();
     steps.forEach((step) => {
-      let target = get(step, 'target');
-      let targetElement = getTypeOf(target) === 'string' ? document.querySelector(target) : target;
-      let condition = get(step, 'condition');
-      let showStep = getTypeOf(condition) === 'function' ? condition(model) : true;
+      let { target, condition, placement, title, content } = step;
+
+      let targetElement =
+        getTypeOf(target) === "string"
+          ? document.querySelector(target)
+          : target;
+      let showStep =
+        getTypeOf(condition) === "function" ? condition(model) : true;
 
       // Only add the step if the target-selector exists in the DOM and if a condition function is not returning false
       if (targetElement && showStep) {
         tour.push({
           target: targetElement,
-          placement: get(step, 'placement'),
-          title: get(step, 'title'),
-          content: get(step, 'content')
+          placement,
+          title,
+          content,
         });
       }
     });
 
     tour = this._addTourStepCount(tour);
-    set(this, '_steps', tour);
+    set(this, "_steps", tour);
     return tour;
   },
 
@@ -380,17 +386,23 @@ export default EmberObject.extend(Evented, {
    * @private
    */
   _addTourStepCount(tourSteps) {
-    let tourManager = get(this, 'tourManager');
-    if (!tourManager.get('includeStepCount')) {
+    let tourManager = this.tourManager;
+    if (!tourManager.get("includeStepCount")) {
       return tourSteps;
     }
     let stepCount = tourSteps.length;
-    let stepOfStepsStr = get(tourManager, 'messages.stepCount').toString().replace('%stepCount%', stepCount);
+    let stepOfStepsStr = tourManager.messages.stepCount
+      .toString()
+      .replace("%stepCount%", stepCount);
 
     return tourSteps.map((step, i) => {
-      let stepOfSteps = stepOfStepsStr.replace('%step%', i + 1);
+      let stepOfSteps = stepOfStepsStr.replace("%step%", i + 1);
       return assign({}, step, {
-        content: `${step.content}<div class='hopscotch-pagination' data-test-site-tour-step="${i + 1}">${stepOfSteps}</div>`
+        content: `${
+          step.content
+        }<div class='hopscotch-pagination' data-test-site-tour-step="${
+          i + 1
+        }">${stepOfSteps}</div>`,
       });
     });
   },
@@ -418,7 +430,7 @@ export default EmberObject.extend(Evented, {
   init() {
     this._super(...arguments);
     let calloutManager = hopscotch.getCalloutManager();
-    this.set('_calloutManager', calloutManager);
+    this.set("_calloutManager", calloutManager);
   },
 
   willDestroy() {
@@ -427,6 +439,5 @@ export default EmberObject.extend(Evented, {
     // Also ensure the callout is removed when moving away from the page
     // Without setting the isRead flag!
     this.hideCallout({ markAsRead: false });
-  }
-
+  },
 });

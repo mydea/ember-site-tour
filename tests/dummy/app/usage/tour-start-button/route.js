@@ -9,7 +9,7 @@ export default Route.extend(ResetControllerMixin, {
 
   activate() {
     run.later(this, () => {
-      let tourManager = this.get('tourManager');
+      let tourManager = this.tourManager;
 
       tourManager.showCallout('tour-start-button-callout', {
         target: document.querySelector('#callout'),

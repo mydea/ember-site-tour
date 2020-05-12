@@ -11,7 +11,8 @@
     "lint:js": "eslint .",
     "start": "ember serve",
     "test": "ember test",
-    "test:all": "ember try:each"
+    "test:all": "ember try:each",
+    "test:one": "ember try:one"
   },
   "repository": "https://github.com/mydea/ember-site-tour",
   "engines": {

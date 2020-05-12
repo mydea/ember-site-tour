@@ -1,0 +1,46 @@
+name: Test & Lint
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: volta-cli/action@v1
+      - uses: mydea/actions-ember-testing@v2
+      - name: Install dependencies
+        run: yarn install
+      - name: Run tests
+        run: yarn test
+      - name: Lint
+        run: |
+          yarn lint:js
+
+  test-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    strategy:
+      matrix:
+        # Keep this in sync with config/ember-try.js
+        ember:
+          [
+            ember-lts-2.18,
+            ember-lts-3.4,
+            ember-release,
+            ember-beta,
+            ember-canary,
+            ember-default-with-jquery,
+          ]
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: volta-cli/action@v1
+      - uses: mydea/actions-ember-testing@v2
+      - name: Install dependencies
+        run: yarn install
+      - name: Run tests
+        run: yarn test:one ${{ matrix.ember }}

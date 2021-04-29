@@ -1,0 +1,30 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: monthly
+    time: "04:00"
+  assignees:
+  - mydea
+  ignore:
+  - dependency-name: ember-template-lint
+    versions:
+    - 2.15.0
+    - 2.18.0
+  - dependency-name: ember-cli-babel
+    versions:
+    - 7.23.0
+  - dependency-name: ember-cli-htmlbars
+    versions:
+    - 5.3.1
+  - dependency-name: lodash
+    versions:
+    - 4.17.20
+  - dependency-name: elliptic
+    versions:
+    - 6.5.3
+  commit-message:
+    prefix: chore
+    prefix-development: chore
+    include: scope

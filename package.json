@@ -67,7 +67,7 @@
     "hopscotch.js"
   ],
   "dependencies": {
-    "broccoli-funnel": "^2.0.1",
+    "broccoli-funnel": "^3.0.6",
     "broccoli-merge-trees": "^3.0.2",
     "ember-cli-babel": "^7.19.0",
     "ember-cli-htmlbars": "^4.3.1",
